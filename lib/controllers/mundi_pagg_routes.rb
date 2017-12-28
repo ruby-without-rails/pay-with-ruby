@@ -1,9 +1,12 @@
+require 'utils/api_helper'
+
 module MundiPaggRoutes
   class << self
     def extended(controller)
+      controller.include PayWithRuby::Utils::ApiHelper
       controller.namespace('/mp'){|c|
         c.get('/hello') {
-          [200, 'Hello i m here']
+          make_default_json_api(self)
         }
       }
 

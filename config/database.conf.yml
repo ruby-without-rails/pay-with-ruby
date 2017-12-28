@@ -1,6 +1,6 @@
 default:
  host: localhost
- user: user
- password: password
- database: database
+ user: paywithruby
+ password: paywithruby
+ database: paywithruby
  port: 5432

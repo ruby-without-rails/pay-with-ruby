@@ -38,7 +38,7 @@ module PayWithRuby
       # https://github.com/britg/sinatra-cross_origin#responding-to-options
       options '*' do
         response.headers['Access-Control-Allow-Methods'] = 'HEAD,GET,PUT,POST,DELETE,OPTIONS'
-        response.headers['Access-Control-Allow-Headers'] = 'Delfos-Auth-Token, X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept, Authorize'
+        response.headers['Access-Control-Allow-Headers'] = 'PayWithRuby-Auth-Token, X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept, Authorize'
         200
       end
     end
