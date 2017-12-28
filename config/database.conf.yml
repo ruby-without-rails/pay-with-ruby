@@ -1,0 +1,6 @@
+default:
+ host: localhost
+ user: user
+ password: password
+ database: database
+ port: 5432
