@@ -29,6 +29,7 @@ module PayWithRuby
     set :port, settings.bind_port
     puts "[Startup Info] - Executando na porta: #{settings.bind_port}"
 
+    set :server, %w[thin webrick]
     set :show_exceptions, settings.show_exceptions
     set :raise_errors, settings.raise_errors
     set :protection, except: %i[json_csrf frame_options]
@@ -42,6 +43,10 @@ module PayWithRuby
         200
       end
     end
+
+    # public folder config
+    # set :root, File.dirname(__FILE__)
+    set :public_folder, File.expand_path('.', File.join(File.dirname(__FILE__), '../public'))
 
     # Application code
     run! if app_file == $0
