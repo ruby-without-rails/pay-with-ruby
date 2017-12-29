@@ -1,5 +1,3 @@
-require 'helpers/api_helper'
-
 module MundiPaggRoutes
   class << self
     def extended(controller)

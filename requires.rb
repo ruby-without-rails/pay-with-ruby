@@ -1,1 +1,0 @@
-%w{helpers models routes utils}.each { |dir| Dir.glob("#{dir}/*.rb", &method(:require)) }

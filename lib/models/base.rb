@@ -1,6 +1,7 @@
 require 'yaml'
 require 'json'
 require 'sequel'
+require 'codecode/common/utils'
 
 require 'utils/discover_os'
 
@@ -90,6 +91,8 @@ module PayWithRuby
 
         Sequel.split_symbols = true
         Sequel.extension :postgres_schemata
+
+        extend CodeCode::Common::Utils::Hash
       end
 
       # Class [BusinessModel] is just a signal that a business class is generic

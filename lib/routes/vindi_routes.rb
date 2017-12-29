@@ -1,5 +1,3 @@
-require 'helpers/api_helper'
-
 module VindiRoutes
   class << self
     def extended(controller)
