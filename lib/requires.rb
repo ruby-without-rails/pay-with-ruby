@@ -14,5 +14,6 @@ require 'helpers/api_helper'
 # Models import:
 require 'models/user'
 require 'models/auth'
+require 'models/category'
 
 require 'aliases'

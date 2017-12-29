@@ -15,11 +15,6 @@ module PayWithRuby
   module Controllers
     # The Generic Base Controller
     module Base
-      module ApiAuthFilter
-        PUBLIC_PATHS = [
-          /\/api\/login/
-        ].freeze
-      end
 
       # The Generic Authentication Filter class:
       module AuthFilter
@@ -27,7 +22,7 @@ module PayWithRuby
           def extended(filter)
             def filter.extended(controller)
               # Set the Base Controller auth filter:
-              controller.set_auth_filter self
+              # controller.set_auth_filter self
               auth_filter = self
 
               # Block all paths, by default:
@@ -47,7 +42,7 @@ module PayWithRuby
 
                   # 2. Authorize:
                   begin
-                    ApiAuther.authorize(auth_token)
+                    auth_token::ApiAuther.authorize(auth_token)
                   rescue StandardError
                     content_type 'application/json;charset=utf-8'
 
@@ -62,6 +57,14 @@ module PayWithRuby
             end
           end
         end
+      end
+
+      module ApiAuthFilter
+        extend AuthFilter
+
+        PUBLIC_PATHS = [
+            /\/api\/login/
+        ].freeze
       end
 
       # Sentry Logger Filter class:
@@ -100,10 +103,12 @@ module PayWithRuby
         end
       end
 
+      # The Basic Controller Class, with authentication
       class BaseApp < Sinatra::Application
         # Extend especific filters:
         extend ApiAuthFilter
         extend LoggerFilter
+        extend PayWithRuby::Utils::Logger
 
         include Sinatra
         register SequelExtension, ConfigFile, CrossOrigin, Namespace
@@ -116,7 +121,7 @@ module PayWithRuby
         # Sinatra::Base.production? or Sinatra::Base.development? or Sinatra::Base.test?
         set environment: :development
 
-        # Defaul Timezone
+        # Default Timezone
         ENV['TZ'] = settings.time_zone
         puts "[Startup Info] - TimeZone: #{ENV['TZ']}"
 
@@ -162,7 +167,9 @@ module PayWithRuby
   class BaseApis < PayWithRuby::Controllers::Base::BaseApp
     require 'routes/authentication_routes.rb'
     require 'routes/user_routes'
+    require 'routes/category_routes'
     extend AuthenticationRoutes
     extend UserRoutes
+    extend CategoryRoutes
   end
 end
