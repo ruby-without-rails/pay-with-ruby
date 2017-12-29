@@ -22,7 +22,7 @@ module PayWithRuby
             block_given? ? response = yield : response = {msg: 'Api ainda não implementada.'}
           rescue ModelException => e
             status = 400
-            response = {error: {msg: e.message}}
+            response = {error: {msg: e.message, status_code: status}}
           end
           [status, response.to_json.gsub("\n", '')]
         else
@@ -43,12 +43,12 @@ module PayWithRuby
             end
           rescue ModelException => e
             status = 400
-            response = {errors: [{msg: e.message}]}
+            response = {error: {msg: e.message, status_code: status}}
           rescue ConstraintViolation, UniqueConstraintViolation, CheckConstraintViolation,
               NotNullConstraintViolation, ForeignKeyConstraintViolation => e
             message = e.message[/DETAIL:(.*)/]
             status = 400
-            response = {error: {msg: message}}
+            response = {error: {msg: message, status_code: status}}
           end
           [status, response.to_json.gsub("\n", '')]
         end
