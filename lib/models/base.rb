@@ -4,33 +4,35 @@ require 'sequel'
 
 require 'utils/discover_os'
 
-
 module PayWithRuby
   module Models
     module Base
 
       # Database constants belong to this module namespace:
       private
-      def self.load_config_file
-        file = 'database.conf.yml'
-        file_path = File.dirname(__FILE__) + "/../../config/#{file}"
-        YAML::load(File.open(file_path)) rescue fail "[Startup Info] - Arquivo de configuração [#{file}] não encontrado no diretório [#{file_path}]"
-      end
-
-      def self.load_db
-        yaml = load_config_file
-        default_config = yaml['default']
-        develop_config = yaml['develop']
-        homolog_config = yaml['homolog']
-
-        case ENV['RACK_ENV']
-          when 'HMG'then
-            Sequel.postgres(homolog_config)
-          when 'DEV'then
-            Sequel.postgres(develop_config)
-          else
-            Sequel.postgres(default_config)
+      class << self
+        def load_config_file
+          file = 'database.conf.yml'
+          file_path = File.dirname(__FILE__) + "/../../config/#{file}"
+          YAML::load(File.open(file_path)) rescue fail "[Startup Info] - Arquivo de configuração [#{file}] não encontrado no diretório [#{file_path}]"
         end
+
+        def load_db
+          yaml = load_config_file
+          default_config = yaml['default']
+          develop_config = yaml['develop']
+          homolog_config = yaml['homolog']
+
+          case ENV['RACK_ENV']
+            when 'HMG' then
+              Sequel.postgres(homolog_config)
+            when 'DEV' then
+              Sequel.postgres(develop_config)
+            else
+              Sequel.postgres(default_config)
+          end
+        end
+
       end
 
       # Database access constants:
@@ -73,14 +75,17 @@ module PayWithRuby
         end
       end
 
+      # Class [UnexpectedParamException]
       class UnexpectedParamException < ModelException; end
 
       # BaseModel is just an alias to Sequel::Model class:
       class BaseModel < Sequel::Model
-        @require_valid_table = false
-        @forced_encoding = 'UTF-8'
+        DEFAULT_CHARSET = 'UTF-8'
 
-        Sequel::Model.plugin :force_encoding, 'UTF-8'
+        @require_valid_table = false
+        @forced_encoding = DEFAULT_CHARSET
+
+        Sequel::Model.plugin :force_encoding, DEFAULT_CHARSET
         Sequel::Model.plugin :after_initialize
 
         Sequel.split_symbols = true

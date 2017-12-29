@@ -1,12 +1,12 @@
 require 'helpers/api_helper'
 
-module MundiPaggRoutes
+module VindiRoutes
   class << self
     def extended(controller)
       controller.include PayWithRuby::Helpers::ApiHelper
 
       controller.get('/') {
-        file_path = File.join(settings.public_folder, 'mundipagg.html')
+        file_path = File.join(settings.public_folder, 'vindi.html')
         if File.exist?(file_path) and File.readable?(file_path)
           send_file file_path
         else
@@ -14,7 +14,7 @@ module MundiPaggRoutes
         end
       }
 
-      controller.namespace('/mundipagg') {|c|
+      controller.namespace('/vindi') {|c|
         c.get('/cobranca/:id_cobranca'){
           make_default_json_api(self)
         }

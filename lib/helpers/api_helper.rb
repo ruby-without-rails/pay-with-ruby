@@ -4,7 +4,7 @@ require 'json'
 require 'models/base'
 
 module PayWithRuby
-  module Utils
+  module Helpers
     module ApiHelper
       include PayWithRuby::Models::Base
       include Sequel

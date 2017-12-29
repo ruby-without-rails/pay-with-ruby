@@ -6,7 +6,7 @@ require 'sinatra/config_file'
 require 'sinatra/namespace'
 
 module PayWithRuby
-  class BaseApis < Sinatra::Application
+  class BaseApp < Sinatra::Application
     register Sinatra::SequelExtension, Sinatra::ConfigFile, Sinatra::CrossOrigin, Sinatra::Namespace
 
     config_filename = File.join(File.dirname(__FILE__), '../config/server.conf.yml')
@@ -52,10 +52,13 @@ module PayWithRuby
     run! if app_file == $0
   end
 
-  class MundiPaggApis < BaseApis
+  class MundiPaggApis < BaseApp
     require 'controllers/mundi_pagg_routes'
     extend MundiPaggRoutes
   end
 
-  class VindiApis < BaseApis; end
+  class VindiApis < BaseApp
+    require 'controllers/vindi_routes'
+    extend VindiRoutes
+  end
 end

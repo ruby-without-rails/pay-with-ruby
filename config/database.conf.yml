@@ -1,6 +1,10 @@
-default:
+default: &default
  host: localhost
  user: paywithruby
  password: paywithruby
  database: paywithruby
  port: 5432
+develop:
+  <<: *default
+homolog:
+  <<: *default
