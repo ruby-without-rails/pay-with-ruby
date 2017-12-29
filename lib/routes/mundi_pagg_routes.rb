@@ -14,18 +14,16 @@ module MundiPaggRoutes
         end
       }
 
-      controller.namespace('/mundipagg') {|c|
-        c.get('/cobranca/:id_cobranca'){
-          make_default_json_api(self)
-        }
+      controller.get('/cobranca/:id_cobranca') {
+        make_default_json_api(self)
+      }
 
-        c.get('/cobrancas/listar/:pagina'){
-          make_default_json_api(self)
-        }
+      controller.get('/cobrancas/listar/:pagina') {
+        make_default_json_api(self)
+      }
 
-        c.post('/cobranca') {
-          make_default_json_api(self)
-        }
+      controller.post('/cobranca') {
+        make_default_json_api(self)
       }
     end
   end

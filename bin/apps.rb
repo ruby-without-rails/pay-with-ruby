@@ -47,18 +47,15 @@ module PayWithRuby
     # public folder config
     # set :root, File.dirname(__FILE__)
     set :public_folder, File.expand_path('.', File.join(File.dirname(__FILE__), '../public'))
-
-    # Application code
-    run! if app_file == $0
   end
 
   class MundiPaggApis < BaseApp
-    require 'controllers/mundi_pagg_routes'
+    require 'routes/mundi_pagg_routes'
     extend MundiPaggRoutes
   end
 
   class VindiApis < BaseApp
-    require 'controllers/vindi_routes'
+    require 'routes/vindi_routes'
     extend VindiRoutes
   end
 end
