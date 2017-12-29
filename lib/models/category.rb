@@ -14,13 +14,35 @@ module PayWithRuby
 
         # def initialize; end
 
+        def validate
+          super
+          errors.add(:name, 'cannot be null') if name.nil?
+          errors.add(:name, 'must be a String') if name and name.match?(/\d/)
+          errors.add(:name, 'cannot be empty') if name and not name.match?(/\d/) and name.empty?
+          errors.add(:name, 'must be have 6 characters') if name and not name.match?(/\d/) and name.size < 6
+        end
+
         class << self
           def save_category(category_data)
-            category = Category.new
+            id = category_data[:id]
+
+            if not id.nil? or not id.match?(/\d/)
+              category = Category[id]
+            else
+              category = Category.new
+            end
+
             category.name = category_data[:name]
 
-            category.save
-            category
+            if category.valid?
+              category.save
+
+              message = category.new? ? 'Categoria foi salva com sucesso!' : 'Categoria foi atualizada com sucesso!'
+
+              {category: category.values, message: message}
+            else
+              {validation_errors: category.errors}
+            end
           end
 
           def get_category_by_id(category_id)
