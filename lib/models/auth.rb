@@ -7,22 +7,22 @@ module PayWithRuby
 
       # @class [UserToken]
       class UserToken < BaseModel
-        extend PayWithRuby::Models::UsuarioModule
+        extend PayWithRuby::Models::UserModule
 
         # Set UserToken dataset:
-        set_dataset DB[:user_token]
+        set_dataset DB[:user_tokens]
 
         # Set primary key and relationships:
         set_primary_key :id
-        many_to_one(:usuario, class: 'PayWithRuby::Models::UsuarioModule::Usuario', key: :id)
+        many_to_one(:users, class: 'PayWithRuby::Models::UserModule::User', key: :id)
 
         # def initialize; end
 
         class << self
-          def salvar_user_token(usuario_id)
+          def save_user_token(user_id)
             user_token = UserToken.new
-            user_token.usuario_id = usuario_id
-            user_token.data_hora_expiracao = Time.now + 36_000
+            user_token.user_id = user_id
+            user_token.expiration_time = Time.now + 36_000
             user_token.token = TokenUtils.generate(255)
 
             user_token.save
@@ -30,7 +30,7 @@ module PayWithRuby
           end
 
           def get_user_by_token(token)
-            UserToken.where(token: token).where(Sequel.lit('data_hora_expiracao > :current_time', {current_time: Time.now})).first
+            UserToken.where(token: token).where(Sequel.lit('expiration_time > :current_time', {current_time: Time.now})).first
           end
         end
       end
@@ -70,7 +70,7 @@ module PayWithRuby
           # From given token, locate the correspondent user and return her/his
           # data.
           def identify(token)
-            user_token = UserToken.where(token: token).where(Sequel.lit('data_hora_expiracao > :current_time', {current_time: Time.now})).first
+            user_token = UserToken.where(token: token).where(Sequel.lit('expiration_time > :current_time', {current_time: Time.now})).first
 
             error_msg = 'User Token não encontrado.'
             raise ModelException.new(error_msg, 404) if user_token.nil?

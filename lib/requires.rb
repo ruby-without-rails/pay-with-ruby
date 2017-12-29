@@ -6,6 +6,7 @@ require 'codecode/common/utils'
 require 'utils/logger'
 require 'utils/token'
 require 'utils/discover_os'
+require 'utils/string'
 
 # Helpers import:
 require 'helpers/api_helper'

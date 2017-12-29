@@ -15,7 +15,7 @@ Create table user_token (
   usuario_id bigint NOT NULL ,
   data_hora_expiracao timestamp without time zone NOT NULL,
   CONSTRAINT user_token_usuario_id_fkey FOREIGN KEY (usuario_id)
-  REFERENCES usuario (id) MATCH SIMPLE
+  REFERENCES users (id) MATCH SIMPLE
   ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
@@ -27,31 +27,31 @@ create table perfil(
   descricao VARCHAR(30) NOT NULL
 );
 
-ALTER TABLE perfil ADD UNIQUE (descricao);
+ALTER TABLE roles ADD UNIQUE (description);
 
-ALTER TABLE perfil ADD codigo VARCHAR(30) NULL;
-ALTER TABLE perfil ALTER COLUMN descricao TYPE VARCHAR(50) USING descricao::VARCHAR(50);
-ALTER TABLE perfil ALTER COLUMN codigo SET NOT NULL;
+ALTER TABLE roles ADD codigo VARCHAR(30) NULL;
+ALTER TABLE roles ALTER COLUMN description TYPE VARCHAR(50) USING description::VARCHAR(50);
+ALTER TABLE roles ALTER COLUMN code SET NOT NULL;
 
 -- Alterações na tabela de usuário
-ALTER TABLE usuario RENAME COLUMN username TO email;
-ALTER TABLE usuario ALTER COLUMN email SET NOT NULL ;
-ALTER TABLE usuario RENAME COLUMN password TO senha;
-ALTER TABLE usuario ALTER COLUMN senha SET NOT NULL ;
-ALTER TABLE usuario ADD COLUMN cpf varchar(25) NOT NULL DEFAULT 0;
-ALTER TABLE usuario ADD UNIQUE (email);
-ALTER TABLE usuario DROP COLUMN nome;
-ALTER TABLE usuario ADD COLUMN perfil_id bigint NOT NULL DEFAULT 1;
-ALTER TABLE usuario ADD CONSTRAINT usuario__perfil_perfil_id_fkey FOREIGN KEY (perfil_id) REFERENCES perfil (id) MATCH SIMPLE;
+ALTER TABLE users RENAME COLUMN username TO email;
+ALTER TABLE users ALTER COLUMN email SET NOT NULL ;
+ALTER TABLE users RENAME COLUMN password TO senha;
+ALTER TABLE users ALTER COLUMN senha SET NOT NULL ;
+ALTER TABLE users ADD COLUMN cpf varchar(25) NOT NULL DEFAULT 0;
+ALTER TABLE users ADD UNIQUE (email);
+ALTER TABLE users DROP COLUMN name;
+ALTER TABLE users ADD COLUMN perfil_id bigint NOT NULL DEFAULT 1;
+ALTER TABLE users ADD CONSTRAINT usuario__perfil_perfil_id_fkey FOREIGN KEY (role_id) REFERENCES roles (id) MATCH SIMPLE;
 
 -- Alterações Tabela usuario
-ALTER TABLE usuario RENAME COLUMN senha TO password;
-ALTER TABLE usuario ADD COLUMN nome varchar(100) NOT NULL DEFAULT '';
+ALTER TABLE users RENAME COLUMN senha TO password;
+ALTER TABLE users ADD COLUMN nome varchar(100) NOT NULL DEFAULT '';
 
 
 -- Correcao na tabela usuarios
-ALTER TABLE usuario DROP CONSTRAINT usuario_email_key;
-ALTER TABLE usuario ADD CONSTRAINT usuario_email_exclusao_key UNIQUE(email, data_hora_exclusao);
+ALTER TABLE users DROP CONSTRAINT usuario_email_key;
+ALTER TABLE users ADD CONSTRAINT usuario_email_exclusao_key UNIQUE(email, deleted_at);
 
 -- Adicionando campo pesquisável na tabela de consulta
-ALTER TABLE usuario ADD COLUMN nome_consulta varchar(255);
+ALTER TABLE users ADD COLUMN nome_consulta varchar(255);
