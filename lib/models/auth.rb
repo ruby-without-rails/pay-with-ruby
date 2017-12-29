@@ -43,9 +43,9 @@ module PayWithRuby
           # Verify if a given access token has access to the system. If so,
           # returns true, otherwise, returns false.
           def authorize(token)
-            user_token = UserToken.where(token: token).where(Sequel.lit('data_hora_expiracao > :current_time', current_time: Time.now)).first
+            user_token = UserToken.where(token: token).where(Sequel.lit('expiration_time > :current_time', current_time: Time.now)).first
 
-            error_msg = 'User not authorized.'
+            error_msg = 'UserToken Not Found. User not authorized.'
             raise ModelException.new(error_msg, 401) if user_token.nil?
 
             true

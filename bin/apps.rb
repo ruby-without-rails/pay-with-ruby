@@ -42,13 +42,13 @@ module PayWithRuby
 
                   # 2. Authorize:
                   begin
-                    auth_token::ApiAuther.authorize(auth_token)
-                  rescue StandardError
+                    auth_filter::Auther.authorize(auth_token)
+                  rescue StandardError => e
                     content_type 'application/json;charset=utf-8'
 
                     msg = 'PayWithRuby-Auth-Token inválido. Acesso não autorizado.'
 
-                    response = { message: msg }
+                    response = { message: msg, exception: e.message }
 
                     halt 401, JSON.generate(response)
                   end
@@ -61,6 +61,9 @@ module PayWithRuby
 
       module ApiAuthFilter
         extend AuthFilter
+
+        # Set the authorization and authentication rules:
+        Auther = PayWithRuby::Models::AuthModule::ApiAuther
 
         PUBLIC_PATHS = [
             /\/api\/login/
