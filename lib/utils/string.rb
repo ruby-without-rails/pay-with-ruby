@@ -23,7 +23,7 @@ module PayWithRuby
         # @param [Hash] vars
         # @return [String]
         def replace_erb(string, vars)
-          ERB.new(string).result(OpenStruct.new(vars).instance_eval {binding})
+          ERB.new(string).result(OpenStruct.new(vars).instance_eval { binding })
         end
 
         # Replace variables from string using Mustache
@@ -40,22 +40,20 @@ module PayWithRuby
 
           for i in 1..100 do
             begin
-
               # Create a random writeable string, with 1024 characters:
-              o = [('a'..'z'), ('A'..'Z'), ('0'..'9')].map \
-              {|i| i.to_a}.flatten
+              o = [('a'..'z'), ('A'..'Z'), ('0'..'9')].map(&:to_a).flatten
 
-              token = (0...quantity).map {o[rand(o.length)]}.join
+              token = (0...quantity).map { o[rand(o.length)] }.join
 
               stop = true
-            rescue
+            rescue StandardError
               stop = false
             end
 
             break if stop
           end
 
-          return token
+          token
         end
 
         def capitalize(value)
@@ -68,13 +66,13 @@ module PayWithRuby
         # @param [String] string
         # @return [String]
         def snake_case(string)
-          string.
-              gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2').
-              gsub(/([a-z\d])([A-Z])/, '\1_\2').
-              tr('-', '_').
-              gsub(/\s/, '_').
-              gsub(/__+/, '_').
-              downcase
+          string
+            .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+            .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+            .tr('-', '_')
+            .gsub(/\s/, '_')
+            .gsub(/__+/, '_')
+            .downcase
         end
 
         # Return a new string with the accents removed
@@ -91,7 +89,6 @@ module PayWithRuby
         # @param valor Numero a ser acrescido de Zeros
         # @param limite [Fixnum] Valor Limite de Zeros
         def preencher_com_zeros(valor, limite)
-
           valor = valor.to_s
 
           zeros = ''
@@ -99,19 +96,14 @@ module PayWithRuby
           tamanho_string = valor.size
 
           for v in tamanho_string..limite
-            if v < limite
-              zeros << '0'
-            end
+            zeros << '0' if v < limite
           end
           zeros.concat(valor)
         end
 
         # Retorna CPF ou CNPJ formatado
         def obter_cpf_cnpj_formatado(cpf_cnpj)
-
-          if cpf_cnpj.include?('.') || cpf_cnpj.include?('-')
-            return cpf_cnpj
-          end
+          return cpf_cnpj if cpf_cnpj.include?('.') || cpf_cnpj.include?('-')
 
           if cpf_cnpj.length.eql?(11)
             return cpf_cnpj.insert(3, '.').insert(7, '.').insert(11, '-')
@@ -121,7 +113,7 @@ module PayWithRuby
             return cpf_cnpj.insert(2, '.').insert(6, '.').insert(10, '/').insert(15, '-')
           end
 
-          return cpf_cnpj
+          cpf_cnpj
         end
       end
     end

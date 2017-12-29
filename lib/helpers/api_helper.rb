@@ -10,7 +10,7 @@ module PayWithRuby
       include Sinatra
       include CodeCode::Common::Utils::Hash
 
-      CONTENT_TYPE = 'application/json;charset=utf-8'
+      CONTENT_TYPE = 'application/json;charset=utf-8'.freeze
 
       def make_default_json_api(api_instance, payload = {})
         request_method = api_instance.env['REQUEST_METHOD']
@@ -19,12 +19,12 @@ module PayWithRuby
           begin
             api_instance.content_type CONTENT_TYPE
             status = 200
-            block_given? ? response = yield : response = {msg: 'Api ainda não implementada.'}
+            block_given? ? response = yield : response = { msg: 'Api ainda não implementada.' }
           rescue ModelException => e
             status = 400
-            response = {error: {msg: e.message, status_code: status}}
+            response = { error: { msg: e.message, status_code: status } }
           end
-          [status, response.to_json.gsub("\n", '')]
+          [status, response.to_json.delete("\n")]
         else
 
           begin
@@ -39,18 +39,18 @@ module PayWithRuby
               status = return_data[:status]
               response = return_data[:response]
             else
-              response = {msg: 'Api não implementada.'}
+              response = { msg: 'Api não implementada.' }
             end
           rescue ModelException => e
             status = 400
-            response = {error: {msg: e.message, status_code: status}}
+            response = { error: { msg: e.message, status_code: status } }
           rescue ConstraintViolation, UniqueConstraintViolation, CheckConstraintViolation,
-              NotNullConstraintViolation, ForeignKeyConstraintViolation => e
+                 NotNullConstraintViolation, ForeignKeyConstraintViolation => e
             message = e.message[/DETAIL:(.*)/]
             status = 400
-            response = {error: {msg: message, status_code: status}}
+            response = { error: { msg: message, status_code: status } }
           end
-          [status, response.to_json.gsub("\n", '')]
+          [status, response.to_json.delete("\n")]
         end
       end
     end
@@ -59,7 +59,7 @@ module PayWithRuby
       include PayWithRuby::Models::Base
 
       def validate_params(body_params, symbols)
-        symbols.each {|s| raise ModelException.new "Parâmetro #{s.to_s} não encontrado. Payload incorreto." unless body_params.has_key?(s)}
+        symbols.each { |s| raise ModelException, "Parâmetro #{s} não encontrado. Payload incorreto." unless body_params.key?(s) }
       end
     end
   end

@@ -7,11 +7,11 @@ module PayWithRuby
       class << self
         def os?
           case os_string
-            when /mswin|msys|mingw|cygwin|bccwin|wince|emc/ then :windows
-            when /darwin|mac os/ then :macosx
-            when /linux/ then :linux
-            when /solaris|bsd/ then :unix
-            else raise StandardError, "Sistema Operacional não identificado: #{self.os_string.inspect}"
+          when /mswin|msys|mingw|cygwin|bccwin|wince|emc/ then :windows
+          when /darwin|mac os/ then :macosx
+          when /linux/ then :linux
+          when /solaris|bsd/ then :unix
+          else raise StandardError, "Sistema Operacional não identificado: #{os_string.inspect}"
           end
         end
 

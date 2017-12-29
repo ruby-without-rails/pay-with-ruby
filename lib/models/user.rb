@@ -7,7 +7,6 @@ include PayWithRuby::Models::Base
 module PayWithRuby
   module Models
     module UserModule
-
       # @class [User]
       class User < BaseModel
         include CodeCode::Common::Utils::Hash
@@ -62,7 +61,7 @@ module PayWithRuby
             user = User.where(id: user_data[:id]).first
             raise ModelException, 'Impossível de atualizar, usuário inexistente no banco de dados.' unless user
 
-            role = Role.get_role_by_code(user_data[:roles])
+            role = Role.get_role_by_code(user_data[:role])
             raise ModelException, 'O codigo do perfil é obrigatório.' unless role
 
             user.update(cpf: user_data[:cpf], name: user_data[:name],
@@ -77,11 +76,12 @@ module PayWithRuby
           def save_or_update_user(body_params)
             if body_params[:id].nil? || body_params[:id].zero? || body_params[:id].empty?
               user = User.save_user(body_params)
-              {message: "Usuário foi salvo com sucesso com id: #{user[:id]}"}
+              message = "Usuário foi salvo com sucesso com id: #{user[:id]}"
             else
               user = User.update_user(body_params)
-              {message: "Usuário com id: #{user[:id]} foi atualizado com sucesso."}
+              message = "Usuário com id: #{user[:id]} foi atualizado com sucesso."
             end
+            {message: message, user: user}
           end
 
           def login_user(login_data)
@@ -99,33 +99,32 @@ module PayWithRuby
           end
 
           def get_user_by_id(user_id)
-            user = DB[:users]
-                       .select(Sequel.qualify(:users, :id), :cpf, :name, :email,
-                               Sequel.qualify(:users, :role_id), :created_at,
-                               Sequel.qualify(:roles, :description),
-                               Sequel.qualify(:roles, :code))
-                       .join(:roles, id: Sequel.qualify(:users, :role_id))
-                       .where(Sequel.qualify(:users, :id) => user_id).first
+            user_data = DB[:users]
+                            .select(Sequel.qualify(:users, :id), :cpf, :name, :email,
+                                    Sequel.qualify(:users, :role_id), :created_at,
+                                    Sequel.qualify(:roles, :description),
+                                    Sequel.qualify(:roles, :code))
+                            .join(:roles, id: Sequel.qualify(:users, :role_id))
+                            .where(Sequel.qualify(:users, :id) => user_id).first
 
-            if user
-              return_data =
-                  {
-                      id: user[:id],
-                      cpf: user[:cpf],
-                      name: user[:name],
-                      email: user[:email],
-                      created_at: user[:created_at],
-                      role: {
-                          id: user[:role_id],
-                          description: user[:description],
-                          code: user[:code]
-                      }
+            if user_data
+              user = {
+                  id: user_data[:id],
+                  cpf: user_data[:cpf],
+                  name: user_data[:name],
+                  email: user_data[:email],
+                  created_at: user_data[:created_at],
+                  role: {
+                      id: user_data[:role_id],
+                      description: user_data[:description],
+                      code: user_data[:code]
                   }
+              }
             else
-              return_data = {}
+              user = {}
             end
 
-            return_data
+            {user: user}
           end
 
           # Pequisa por usuarios
@@ -133,7 +132,6 @@ module PayWithRuby
             query = '(query_name LIKE :query OR cpf LIKE :query OR email LIKE :query)'
 
             body_params[:query] = StringUtils.remove_accents(body_params[:query])
-
             body_params[:query].downcase!
 
             users = DB[:users]
@@ -152,7 +150,7 @@ module PayWithRuby
 
             total_items = users.count
 
-            users = users.paginate(body_params[:pagina].to_i, 20)
+            users = users.paginate(body_params[:page].to_i, 20)
 
             user_array = []
 
@@ -192,31 +190,32 @@ module PayWithRuby
 
           # Desabilitar usuario
           def disable_user(user_id)
-            usuario = User.where(id: user_id).where(deleted_at: nil).first
-            usuario.update(deleted_at: Time.now) if usuario
+            user = User.where(id: user_id).where(deleted_at: nil).first
+            user.update(deleted_at: Time.now) if user
 
-            retorno = {msg: 'Usuário excluído com sucesso'} if usuario
-            retorno ||= {msg: 'Usuário não encontrado'}
-            retorno
+            msg = user.nil? ? "Usuário com o id: #{user_id} não encontrado" : "Usuário com id: #{user_id} excluído com sucesso"
+
+            {msg: msg}
           end
 
           def list_disabled_users
-            User.exclude(deleted_at: nil).all.map(&:values)
+            users = User.exclude(deleted_at: nil).all.map(&:values)
+            {users: users}
           end
 
           def list_users_with_pagination(body_params)
             page = body_params[:pagina] || 1
             limit = body_params[:limite] || 20
             users = DB[:users].join(:roles, id: Sequel.qualify(:users, :role_id))
-                           .select(Sequel.qualify(:users, :id),
-                                   Sequel.qualify(:users, :cpf),
-                                   Sequel.qualify(:users, :name),
-                                   Sequel.qualify(:users, :email),
-                                   Sequel.qualify(:users, :created_at),
-                                   Sequel.qualify(:roles, :id).as(:role_id),
-                                   Sequel.qualify(:roles, :description),
-                                   Sequel.qualify(:roles, :code))
-                           .extension(:pagination).where(deleted_at: nil).order(:name)
+                        .select(Sequel.qualify(:users, :id),
+                                Sequel.qualify(:users, :cpf),
+                                Sequel.qualify(:users, :name),
+                                Sequel.qualify(:users, :email),
+                                Sequel.qualify(:users, :created_at),
+                                Sequel.qualify(:roles, :id).as(:role_id),
+                                Sequel.qualify(:roles, :description),
+                                Sequel.qualify(:roles, :code))
+                        .extension(:pagination).where(deleted_at: nil).order(:name)
             total_items = users.count
             users = users.paginate(page.to_i, limit).all
 
@@ -224,13 +223,14 @@ module PayWithRuby
 
             users.each do |u|
               user_array << {id: u[:id], email: u[:email], cpf: u[:cpf], name: u[:name],
-                                 role: {id: u[:role_id], description: u[:description], code: u[:code]}}
+                             role: {id: u[:role_id], description: u[:description], code: u[:code]}}
             end
 
             {total_items: total_items, users: user_array}
           end
 
           private
+
           def invalidade_token(token)
             user_token = DB[:user_tokens].where(token: token)
             user_token.delete if user_token

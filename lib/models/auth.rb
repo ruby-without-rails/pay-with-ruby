@@ -30,7 +30,7 @@ module PayWithRuby
           end
 
           def get_user_by_token(token)
-            UserToken.where(token: token).where(Sequel.lit('expiration_time > :current_time', {current_time: Time.now})).first
+            UserToken.where(token: token).where(Sequel.lit('expiration_time > :current_time', current_time: Time.now)).first
           end
         end
       end
@@ -43,7 +43,7 @@ module PayWithRuby
           # Verify if a given access token has access to the system. If so,
           # returns true, otherwise, returns false.
           def authorize(token)
-            user_token = UserToken.where(token: token).where(Sequel.lit('data_hora_expiracao > :current_time', {current_time: Time.now})).first
+            user_token = UserToken.where(token: token).where(Sequel.lit('data_hora_expiracao > :current_time', current_time: Time.now)).first
 
             error_msg = 'User not authorized.'
             raise ModelException.new(error_msg, 401) if user_token.nil?
@@ -60,9 +60,9 @@ module PayWithRuby
           def unauthorize_or_raise(token)
             return_data = unauthorize(token)
             if return_data
-              {mensagem: 'Logout realizado com sucesso.'}
+              { mensagem: 'Logout realizado com sucesso.' }
             else
-              raise ModelException.new 'Não foi possível realizar logout.'
+              raise ModelException, 'Não foi possível realizar logout.'
             end
           end
 
@@ -70,7 +70,7 @@ module PayWithRuby
           # From given token, locate the correspondent user and return her/his
           # data.
           def identify(token)
-            user_token = UserToken.where(token: token).where(Sequel.lit('expiration_time > :current_time', {current_time: Time.now})).first
+            user_token = UserToken.where(token: token).where(Sequel.lit('expiration_time > :current_time', current_time: Time.now)).first
 
             error_msg = 'User Token não encontrado.'
             raise ModelException.new(error_msg, 404) if user_token.nil?

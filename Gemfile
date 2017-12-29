@@ -6,8 +6,9 @@ ruby '>= 1.9.3'
 gem 'codecode-common-utils'
 gem 'rest-client'
 
-gem 'mustache'
 gem 'i18n'
+gem 'mustache'
+gem 'rubocop'
 
 gem 'sentry-raven'
 gem 'sinatra'

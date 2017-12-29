@@ -17,7 +17,7 @@ module PayWithRuby
     module Base
       module ApiAuthFilter
         PUBLIC_PATHS = [
-            /\/api\/login/
+          /\/api\/login/
         ].freeze
       end
 
@@ -31,12 +31,11 @@ module PayWithRuby
               auth_filter = self
 
               # Block all paths, by default:
-              controller.before {
-
+              controller.before do
                 authorize = true
                 authorize = false if request.request_method == 'OPTIONS'
 
-                auth_filter::PUBLIC_PATHS.each {|path| authorize = false if path.match(request.path_info)}
+                auth_filter::PUBLIC_PATHS.each { |path| authorize = false if path.match(request.path_info) }
 
                 #
                 # Evaluate authorization code
@@ -49,17 +48,17 @@ module PayWithRuby
                   # 2. Authorize:
                   begin
                     ApiAuther.authorize(auth_token)
-                  rescue
+                  rescue StandardError
                     content_type 'application/json;charset=utf-8'
 
                     msg = 'PayWithRuby-Auth-Token inválido. Acesso não autorizado.'
 
-                    response = {message: msg}
+                    response = { message: msg }
 
                     halt 401, JSON.generate(response)
                   end
                 end
-              }
+              end
             end
           end
         end
@@ -69,23 +68,23 @@ module PayWithRuby
       module LoggerFilter
         class << self
           def extended(controller)
-            controller.before {
+            controller.before do
               # Read and save request data to be used in the error handler
               @request_payload = request.body.read
-              @request_payload = @request_payload.gsub("\n", "")
+              @request_payload = @request_payload.delete("\n")
               @request_url = request.env['REQUEST_URI']
               @request_token = request.env['HTTP_PAYWITHRUBY_AUTH_TOKEN']
               request.body.rewind
 
               case request.env['REQUEST_METHOD']
-                when 'POST', 'PUT' then
-                  if @request_payload.nil? || @request_payload.empty?
-                    exception = UnexpectedParamException.new 'Request sem parâmetros.'
-                    content_type 'application/json;charset=utf-8'
-                    halt 400, exception.to_json
-                  end
+              when 'POST', 'PUT' then
+                if @request_payload.nil? || @request_payload.empty?
+                  exception = UnexpectedParamException.new 'Request sem parâmetros.'
+                  content_type 'application/json;charset=utf-8'
+                  halt 400, exception.to_json
+                end
               end
-            }
+            end
 
             controller.error do
               # Log uncaught errors with Sentry, sending env variables
@@ -93,8 +92,8 @@ module PayWithRuby
               extra = env
               extra['REQUEST_BODY'] = @request_payload
               PayWithRuby::Utils::Logger.error(
-                  env['sinatra.error'],
-                  extra: extra
+                env['sinatra.error'],
+                extra: extra
               )
             end
           end
@@ -148,8 +147,6 @@ module PayWithRuby
         set :public_folder, File.expand_path('.', File.join(File.dirname(__FILE__), '../public'))
       end
     end
-
-
   end
 
   class MundiPaggApis < PayWithRuby::Controllers::Base::BaseApp

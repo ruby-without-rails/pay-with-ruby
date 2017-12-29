@@ -2,15 +2,15 @@ require 'yaml'
 require 'json'
 require 'sequel'
 require 'codecode/common/utils'
-
 require 'utils/discover_os'
 
 module PayWithRuby
   module Models
     module Base
-
       # Database constants belong to this module namespace:
+
       private
+
       class << self
         def load_config_file
           file = 'database.conf.yml'
@@ -25,15 +25,14 @@ module PayWithRuby
           homolog_config = yaml['homolog']
 
           case ENV['RACK_ENV']
-            when 'HMG' then
-              Sequel.postgres(homolog_config)
-            when 'DEV' then
-              Sequel.postgres(develop_config)
-            else
-              Sequel.postgres(default_config)
+          when 'HMG' then
+            Sequel.postgres(homolog_config)
+          when 'DEV' then
+            Sequel.postgres(develop_config)
+          else
+            Sequel.postgres(default_config)
           end
         end
-
       end
 
       # Database access constants:
@@ -68,7 +67,7 @@ module PayWithRuby
         end
 
         def to_hash
-          {status: @status, message: @message, code: @code, data: @data}
+          { status: @status, message: @message, code: @code, data: @data }
         end
 
         def to_response
@@ -81,10 +80,11 @@ module PayWithRuby
 
       # BaseModel is just an alias to Sequel::Model class:
       class BaseModel < Sequel::Model
-        DEFAULT_CHARSET = 'UTF-8'
+        DEFAULT_CHARSET = 'UTF-8'.freeze
 
         @require_valid_table = false
         @forced_encoding = DEFAULT_CHARSET
+        set_dataset DB['']
 
         Sequel::Model.plugin :force_encoding, DEFAULT_CHARSET
         Sequel::Model.plugin :after_initialize

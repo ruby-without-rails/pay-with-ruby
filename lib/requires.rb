@@ -11,7 +11,6 @@ require 'utils/string'
 # Helpers import:
 require 'helpers/api_helper'
 
-
 # Models import:
 require 'models/user'
 require 'models/auth'

@@ -14,4 +14,3 @@ ApiAuther = PayWithRuby::Models::AuthModule::ApiAuther
 # usuario.rb
 User = PayWithRuby::Models::UserModule::User
 Role = PayWithRuby::Models::UserModule::Role
-

@@ -3,72 +3,71 @@ module UserRoutes
     def extended(controller)
       controller.include PayWithRuby::Helpers::ApiHelper
 
-      controller.namespace('/api') {|c|
-        c.get('/roles') {
-          make_default_json_api(self) {
+      controller.namespace('/api') do |c|
+        c.get('/roles') do
+          make_default_json_api(self) do
             Role.list_roles
-          }
-        }
+          end
+        end
 
-        c.post('/users') {
-          make_default_json_api(self, @request_payload) {|params, _status_code|
-            {status: _status_code, response: User.save_or_update_user(params)}
-          }
-        }
+        c.post('/users') do
+          make_default_json_api(self, @request_payload) do |params, _status_code|
+            { status: _status_code, response: User.save_or_update_user(params) }
+          end
+        end
 
-        c.post('/users/find') {
-          make_default_json_api(self, @request_payload) {|params, _status_code|
-            {status: _status_code, response: User.find_user(params)}
-          }
-        }
+        c.post('/users/find') do
+          make_default_json_api(self, @request_payload) do |params, _status_code|
+            { status: _status_code, response: User.find_user(params) }
+          end
+        end
 
-        c.delete('/users/:usuario_id') {|usuario_id|
-          make_default_json_api(self) {
-            raise UnexpectedParamException.new "Parâmetro de URL inesperado #{usuario_id}" unless usuario_id.match(/^\d+$/)
+        c.delete('/users/:user_id') do |user_id|
+          make_default_json_api(self) do
+            raise UnexpectedParamException, "Parâmetro de URL inesperado #{user_id}" unless user_id =~ /^\d+$/
 
-            User.disable_user(usuario_id)
-          }
-        }
+            User.disable_user(user_id)
+          end
+        end
 
-        c.get('/users/disabled-list') {
-          make_default_json_api(self) {
+        c.get('/users/list-disabled') do
+          make_default_json_api(self) do
             User.list_disabled_users
-          }
-        }
+          end
+        end
 
-        c.get('/user/:usuario_id') {|usuario_id|
-          make_default_json_api(self) {
-            raise UnexpectedParamException.new "Parâmetro de URL inesperado #{usuario_id}" unless usuario_id.match(/^\d+$/)
+        c.get('/user/:user_id') do |user_id|
+          make_default_json_api(self) do
+            raise UnexpectedParamException, "Parâmetro de URL inesperado #{user_id}" unless user_id =~ /^\d+$/
 
-            User.get_user_by_id(usuario_id)
-          }
-        }
+            User.get_user_by_id(user_id)
+          end
+        end
 
-        c.post('/user/change-password') {
-          make_default_json_api(self, @request_payload) {|params, _status_code|
-
+        c.post('/user/change-password') do
+          make_default_json_api(self, @request_payload) do |params, _status_code|
             user_token = ApiAuther.identify(@request_token)
 
             user = User.get_user_by_id_as_object(user_token[:user_id])
 
             user = User.change_password(params, @request_token, user) if user
 
-            out = {mensagem: 'Senha alterada com sucesso.'} if user
+            out = { mensagem: 'Senha alterada com sucesso.' } if user
 
             params[:email] = user[:email]
 
-            out ||= {mensagem: 'Não foi possível alterar a senha'}
+            out ||= { mensagem: 'Não foi possível alterar a senha' }
 
-            {status: _status_code, response: out}
-          }
-        }
+            { status: _status_code, response: out }
+          end
+        end
 
-        c.post('/users/list') {
-          make_default_json_api(self, @request_payload) {|params, _status_code|
-            {status: _status_code, response: User.list_users_with_pagination(params)}
-          }
-        }
-      }
+        c.post('/users/list') do
+          make_default_json_api(self, @request_payload) do |params, _status_code|
+            { status: _status_code, response: User.list_users_with_pagination(params) }
+          end
+        end
+      end
     end
   end
 end

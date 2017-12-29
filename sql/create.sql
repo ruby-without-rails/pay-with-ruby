@@ -37,3 +37,47 @@ create table user_tokens(
   expiration_time timestamp not null
 );
 
+create table categories(
+  id serial not null,
+  name varchar(100) not null
+);
+
+create unique index categories_id_uindex
+  on categories (id);
+
+create unique index categories_name_uindex
+  on categories (name);
+
+create table products(
+  name varchar(255) not null,
+  id bigserial not null
+    constraint products_pkey
+    primary key,
+  description text not null,
+  category_id bigint not null
+    constraint products_categories_id_fk
+    references categories (id)
+);
+
+create unique index products_id_uindex
+  on products (id);
+
+create table thumbs(
+  id serial not null
+    constraint thumbs_pkey
+    primary key,
+  product_id bigint not null
+    constraint thumbs_products_id_fk
+    references products,
+  json_thumbs text not null
+);
+
+create unique index thumbs_id_uindex
+  on thumbs (id);
+
+
+
+
+
+
+
