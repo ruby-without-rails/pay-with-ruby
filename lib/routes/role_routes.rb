@@ -12,7 +12,7 @@ module RoleRoutes
           end
         end
 
-        c.post('role') do
+        c.post('/role') do
           make_default_json_api(self)
         end
 

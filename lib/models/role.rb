@@ -27,10 +27,14 @@ module PayWithRuby
           end
 
           def delete_role(role_id)
-            role = Role[role_id]
-            role.delete if role
-
-            msg = role.nil? ? "Perfil com o id: #{role_id} não encontrado" : "Perfil com id: #{role_id} excluído com sucesso"
+            begin
+              role = Role[role_id]
+              role.delete if role
+              msg = role.nil? ? "Perfil com o id: #{role_id} não encontrado" : "Perfil com id: #{role_id} excluído com sucesso"
+            rescue Sequel::ForeignKeyConstraintViolation
+              msg = 'Não é possível realizar a remoção do perfil.\n Descadastre os usuários ativos com este perfil e repita a operação.'
+              raise ModelException.new msg
+            end
 
             {msg: msg}
           end
