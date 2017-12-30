@@ -36,22 +36,30 @@ module PayWithRuby
 
             if category.valid?
               category.save
-
               message = category.new? ? 'Categoria foi salva com sucesso!' : 'Categoria foi atualizada com sucesso!'
-
-              {category: category.values, message: message}
+              { category: category.values, message: message }
             else
-              {validation_errors: category.errors}
+              { validation_errors: category.errors }
             end
           end
 
           def get_category_by_id(category_id)
             category = Category[category_id]
-            {category: category.nil? ? {} : category}
+            { category: category.nil? ? {} : category }
+          end
+
+          def get_category_by_name(category_name)
+            category = Category.where(name: category_name).first
+            { category: category.nil? ? {} : category }
+          end
+
+          def find_categories_by_name(category_name)
+            categories = Category.where(Sequel.ilike(name: "%#{category_name}%")).all
+            { categories: categories.nil? ? {} : categories.map(&:values) }
           end
 
           def list_categories
-            {categories: Category.all.map(&:values)}
+            { categories: Category.all.map(&:values) }
           end
 
           def delete_category(category_id)
@@ -60,7 +68,7 @@ module PayWithRuby
 
             msg = category.nil? ? "Categoria com o id: #{category_id} não encontrada" : "Categoria com id: #{category_id} excluída com sucesso"
 
-            {msg: msg}
+            { msg: msg }
           end
         end
       end
