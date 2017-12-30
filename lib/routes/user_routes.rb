@@ -5,23 +5,9 @@ module UserRoutes
 
       controller.namespace('/api') do |c|
 
-        c.post('/users') do
-          make_default_json_api(self, @request_payload) do |params, _status_code|
-            {status: _status_code, response: User.save_or_update_user(params)}
-          end
-        end
-
         c.post('/users/find') do
           make_default_json_api(self, @request_payload) do |params, _status_code|
             {status: _status_code, response: User.find_user(params)}
-          end
-        end
-
-        c.delete('/users/:user_id') do |user_id|
-          make_default_json_api(self) do
-            raise UnexpectedParamException, "Parâmetro de URL inesperado #{user_id}" unless user_id =~ /^\d+$/
-
-            User.disable_user(user_id)
           end
         end
 
@@ -31,11 +17,31 @@ module UserRoutes
           end
         end
 
+        c.post('/users/list') do
+          make_default_json_api(self, @request_payload) do |params, _status_code|
+            {status: _status_code, response: User.list_users_with_pagination(params)}
+          end
+        end
+
+        c.post('/user') do
+          make_default_json_api(self, @request_payload) do |params, _status_code|
+            {status: _status_code, response: User.save_or_update_user(params)}
+          end
+        end
+
         c.get('/user/:user_id') do |user_id|
           make_default_json_api(self) do
             raise UnexpectedParamException, "Parâmetro de URL inesperado #{user_id}" unless user_id =~ /^\d+$/
 
             User.get_user_by_id(user_id)
+          end
+        end
+
+        c.delete('/user/:user_id') do |user_id|
+          make_default_json_api(self) do
+            raise UnexpectedParamException, "Parâmetro de URL inesperado #{user_id}" unless user_id =~ /^\d+$/
+
+            User.disable_user(user_id)
           end
         end
 
@@ -54,12 +60,6 @@ module UserRoutes
             out ||= {mensagem: 'Não foi possível alterar a senha'}
 
             {status: _status_code, response: out}
-          end
-        end
-
-        c.post('/users/list') do
-          make_default_json_api(self, @request_payload) do |params, _status_code|
-            {status: _status_code, response: User.list_users_with_pagination(params)}
           end
         end
       end

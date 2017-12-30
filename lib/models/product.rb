@@ -24,7 +24,7 @@ module PayWithRuby
           errors.add(:name, 'must be have 6 characters') if name and not name.match?(/\d/) and name.size < 6
 
           errors.add(:description, 'cannot be null') if description.nil?
-          errors.add(:description, 'must be a String') if description and description.match?(/\w/)
+          errors.add(:description, 'must be a String') if description and not description.match?(/\w/)
           errors.add(:description, 'cannot be empty') if description and not description.match?(/\d/) and description.empty?
         end
 

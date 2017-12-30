@@ -4,13 +4,14 @@ module CategoryRoutes
       controller.include PayWithRuby::Helpers::ApiHelper
 
       controller.namespace('/api') do |c|
+
         c.get('/categories') do
           make_default_json_api(self) do
             Category.list_categories
           end
         end
 
-        c.post('/categories') do
+        c.post('/category') do
           make_default_json_api(self, @request_payload) do |params, _status_code|
             {status: _status_code, response: Category.save_category(params)}
           end

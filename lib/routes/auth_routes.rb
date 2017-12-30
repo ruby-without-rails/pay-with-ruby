@@ -5,6 +5,7 @@ module AuthRoutes
 
       controller.namespace('/api') do |c|
         c.namespace('/auth') do |c|
+
           c.post('/login') do
             make_default_json_api(self, @request_payload) do |params, _status_code|
               user = User.login_user(params)
