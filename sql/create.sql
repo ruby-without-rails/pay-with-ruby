@@ -75,6 +75,42 @@ create table thumbs(
 create unique index thumbs_id_uindex
   on thumbs (id);
 
+create table customers(
+  id serial not null
+    constraint customers_pkey
+    primary key,
+  name varchar(255) not null,
+  cpf varchar(25) not null,
+  fcm_id varchar(255) not null,
+  email varchar(255) not null,
+  created_at timestamp default now() not null,
+  updated_at timestamp,
+  deleted_at timestamp
+);
+
+create unique index customers_id_uindex
+  on customers (id);
+
+create table orders(
+  id serial not null
+    constraint orders_pkey
+    primary key,
+  created_at timestamp default now() not null,
+  json_cart text not null,
+  discount double precision default 0 not null,
+  total double precision default 0 not null,
+  customer_id bigint not null
+    constraint orders_customers_id_fk
+    references customers,
+  canceled_at timestamp
+);
+
+create unique index orders_id_uindex
+  on orders (id);
+
+
+
+
 
 
 
