@@ -183,7 +183,7 @@ module PayWithRuby
 
             user = user.update(password: Digest::SHA1.hexdigest(body_params[:new_password]))
 
-            invalidade_token(token)
+            UserToken.invalidade_token(token)
 
             user
           end
@@ -227,13 +227,6 @@ module PayWithRuby
             end
 
             {total_items: total_items, users: user_array}
-          end
-
-          private
-
-          def invalidade_token(token)
-            user_token = DB[:user_tokens].where(token: token)
-            user_token.delete if user_token
           end
         end
       end

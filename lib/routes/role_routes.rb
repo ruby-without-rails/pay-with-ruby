@@ -13,7 +13,10 @@ module RoleRoutes
         end
 
         c.post('/role') do
-          make_default_json_api(self)
+          make_default_json_api(self, @request_payload) do |params, _status_code|
+            validate_params(params, %i[code description])
+            {status: _status_code, response: Role.save_role(params)}
+          end
         end
 
         c.get('/role/:role_id') do |role_id|

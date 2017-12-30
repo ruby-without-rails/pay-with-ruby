@@ -27,7 +27,7 @@ module PayWithRuby
           def save_category(category_data)
             id = category_data[:id]
 
-            if not id.nil? or not id.match?(/\d/)
+            if not id.nil? and id.match?(/\d/)
               category = Category[id]
             else
               category = Category.new
@@ -37,7 +37,7 @@ module PayWithRuby
 
             if category.valid?
               category.save
-              message = category.new? ? 'Categoria foi salva com sucesso!' : 'Categoria foi atualizada com sucesso!'
+              message = category.exists? ? 'Categoria foi atualizada com sucesso!' : 'Categoria foi salva com sucesso!'
               {category: category.values, message: message}
             else
               {validation_errors: category.errors}

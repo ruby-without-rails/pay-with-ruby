@@ -56,7 +56,7 @@ module PayWithRuby
 
             if product.valid?
               product.save
-              message = product.new? ? 'Produto foi salvo com sucesso!' : 'Produto foi atualizado com sucesso!'
+              message = product.exists? ? 'Produto foi atualizado com sucesso!' : 'Produto foi salvo com sucesso!'
               {product: product.values, message: message}
             else
               {validation_errors: product.errors}

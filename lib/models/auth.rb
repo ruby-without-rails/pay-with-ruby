@@ -32,6 +32,11 @@ module PayWithRuby
           def get_user_by_token(token)
             UserToken.where(token: token).where(Sequel.lit('expiration_time > :current_time', current_time: Time.now)).first
           end
+
+          def invalidade_token(token)
+            user_token = UserToken.where(token: token).first
+            user_token.delete if user_token
+          end
         end
       end
 
