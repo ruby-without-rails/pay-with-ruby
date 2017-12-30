@@ -22,13 +22,17 @@ module PayWithRuby
           errors.add(:name, 'must be a String') if name and name.match?(/\d/)
           errors.add(:name, 'cannot be empty') if name and not name.match?(/\d/) and name.empty?
           errors.add(:name, 'must be have 6 characters') if name and not name.match?(/\d/) and name.size < 6
+
+          errors.add(:description, 'cannot be null') if description.nil?
+          errors.add(:description, 'must be a String') if description and description.match?(/\w/)
+          errors.add(:description, 'cannot be empty') if description and not description.match?(/\d/) and description.empty?
         end
 
         class << self
           def save_product(product_data)
             id = product_data[:id]
 
-            if not id.nil? or not id.match?(/\d/)
+            if not id.nil? and id.match?(/\d/)
               product = Product[id]
             else
               product = Product.new
@@ -41,10 +45,12 @@ module PayWithRuby
             raise ModelException, 'Um id ou nome de categoria deve ser informado' if category_id_or_name.nil?
 
             if category_id_or_name.match?(/\d/)
-              category = Category.get_category_by_id(category_id_or_name)
+              category = Category.get_category_by_id(category_id_or_name, false)
             else
-              category = Category.get_category_by_name(category_id_or_name)
+              category = Category.get_category_by_name(category_id_or_name, false)
             end
+
+            raise ModelException, "Categoria não encontrada." unless category
 
             product.category = category
 

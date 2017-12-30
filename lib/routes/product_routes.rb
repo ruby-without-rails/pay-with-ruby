@@ -2,6 +2,7 @@ module ProductRoutes
   class << self
     def extended(controller)
       controller.include PayWithRuby::Helpers::ApiHelper
+      controller.include PayWithRuby::Helpers::ApiValidation
 
       controller.namespace('/api') do |c|
         c.get('/products') do
@@ -12,6 +13,7 @@ module ProductRoutes
 
         c.post('/products') do
           make_default_json_api(self, @request_payload) do |params, _status_code|
+            validate_params(params, %i[name description category])
             {status: _status_code, response: Product.save_product(params)}
           end
         end
