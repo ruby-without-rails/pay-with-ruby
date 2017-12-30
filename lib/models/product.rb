@@ -65,7 +65,7 @@ module PayWithRuby
 
           def get_product_by_id(product_id)
             product = Product[product_id]
-            {product: product.nil? ? {} : product}
+            {product: product.nil? ? {} : product.values}
           end
 
           def list_products
