@@ -1,13 +1,13 @@
 require 'requires'
 
+include PayWithRuby::Models::Base
+
 module PayWithRuby
   module Models
     module AuthModule
-      include PayWithRuby::Models::Base
 
       # @class [UserToken]
       class UserToken < BaseModel
-        extend PayWithRuby::Models::UserModule
 
         # Set UserToken dataset:
         set_dataset DB[:user_tokens]

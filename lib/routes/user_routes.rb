@@ -4,21 +4,16 @@ module UserRoutes
       controller.include PayWithRuby::Helpers::ApiHelper
 
       controller.namespace('/api') do |c|
-        c.get('/roles') do
-          make_default_json_api(self) do
-            Role.list_roles
-          end
-        end
 
         c.post('/users') do
           make_default_json_api(self, @request_payload) do |params, _status_code|
-            { status: _status_code, response: User.save_or_update_user(params) }
+            {status: _status_code, response: User.save_or_update_user(params)}
           end
         end
 
         c.post('/users/find') do
           make_default_json_api(self, @request_payload) do |params, _status_code|
-            { status: _status_code, response: User.find_user(params) }
+            {status: _status_code, response: User.find_user(params)}
           end
         end
 
@@ -52,19 +47,19 @@ module UserRoutes
 
             user = User.change_password(params, @request_token, user) if user
 
-            out = { mensagem: 'Senha alterada com sucesso.' } if user
+            out = {mensagem: 'Senha alterada com sucesso.'} if user
 
             params[:email] = user[:email]
 
-            out ||= { mensagem: 'Não foi possível alterar a senha' }
+            out ||= {mensagem: 'Não foi possível alterar a senha'}
 
-            { status: _status_code, response: out }
+            {status: _status_code, response: out}
           end
         end
 
         c.post('/users/list') do
           make_default_json_api(self, @request_payload) do |params, _status_code|
-            { status: _status_code, response: User.list_users_with_pagination(params) }
+            {status: _status_code, response: User.list_users_with_pagination(params)}
           end
         end
       end

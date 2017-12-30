@@ -30,7 +30,7 @@ module PayWithRuby
                 authorize = true
                 authorize = false if request.request_method == 'OPTIONS'
 
-                auth_filter::PUBLIC_PATHS.each { |path| authorize = false if path.match(request.path_info) }
+                auth_filter::PUBLIC_PATHS.each {|path| authorize = false if path.match(request.path_info)}
 
                 #
                 # Evaluate authorization code
@@ -48,7 +48,7 @@ module PayWithRuby
 
                     msg = 'PayWithRuby-Auth-Token inválido. Acesso não autorizado.'
 
-                    response = { message: msg, exception: e.message }
+                    response = {message: msg, exception: e.message}
 
                     halt 401, JSON.generate(response)
                   end
@@ -66,7 +66,7 @@ module PayWithRuby
         Auther = PayWithRuby::Models::AuthModule::ApiAuther
 
         PUBLIC_PATHS = [
-            /\/api\/login/
+            /\/api\/auth\/login/
         ].freeze
       end
 
@@ -83,12 +83,12 @@ module PayWithRuby
               request.body.rewind
 
               case request.env['REQUEST_METHOD']
-              when 'POST', 'PUT' then
-                if @request_payload.nil? || @request_payload.empty?
-                  exception = UnexpectedParamException.new 'Request sem parâmetros.'
-                  content_type 'application/json;charset=utf-8'
-                  halt 400, exception.to_json
-                end
+                when 'POST', 'PUT' then
+                  if @request_payload.nil? || @request_payload.empty?
+                    exception = UnexpectedParamException.new 'Request sem parâmetros.'
+                    content_type 'application/json;charset=utf-8'
+                    halt 400, exception.to_json
+                  end
               end
             end
 
@@ -98,8 +98,8 @@ module PayWithRuby
               extra = env
               extra['REQUEST_BODY'] = @request_payload
               PayWithRuby::Utils::Logger.error(
-                env['sinatra.error'],
-                extra: extra
+                  env['sinatra.error'],
+                  extra: extra
               )
             end
           end
@@ -157,22 +157,29 @@ module PayWithRuby
     end
   end
 
-  class MundiPaggApis < PayWithRuby::Controllers::Base::BaseApp
+  include PayWithRuby::Controllers::Base
+
+  class MundiPaggApis < BaseApp
     require 'routes/mundi_pagg_routes'
     extend MundiPaggRoutes
   end
 
-  class VindiApis < PayWithRuby::Controllers::Base::BaseApp
+  class VindiApis < BaseApp
     require 'routes/vindi_routes'
     extend VindiRoutes
   end
 
-  class BaseApis < PayWithRuby::Controllers::Base::BaseApp
-    require 'routes/authentication_routes.rb'
-    require 'routes/user_routes'
+  class BaseApis < BaseApp
+    require 'routes/auth_routes.rb'
     require 'routes/category_routes'
-    extend AuthenticationRoutes
-    extend UserRoutes
+    require 'routes/product_routes'
+    require 'routes/role_routes'
+    require 'routes/user_routes'
+
+    extend AuthRoutes
     extend CategoryRoutes
+    extend ProductRoutes
+    extend RoleRoutes
+    extend UserRoutes
   end
 end

@@ -1,9 +1,10 @@
 require 'requires'
 
+include PayWithRuby::Models::Base
+
 module PayWithRuby
   module Models
     module ProductModule
-      include PayWithRuby::Models::Base
 
       class Thumb < BaseModel
         # Set Thumb dataset:

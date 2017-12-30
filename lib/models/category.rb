@@ -1,9 +1,10 @@
 require 'requires'
 
+include PayWithRuby::Models::Base
+
 module PayWithRuby
   module Models
     module ProductModule
-      include PayWithRuby::Models::Base
 
       class Category < BaseModel
         # Set Category dataset:
@@ -45,12 +46,12 @@ module PayWithRuby
 
           def get_category_by_id(category_id)
             category = Category[category_id]
-            { category: category.nil? ? {} : category }
+            { category: category.nil? ? {} : category.values }
           end
 
           def get_category_by_name(category_name)
             category = Category.where(name: category_name).first
-            { category: category.nil? ? {} : category }
+            { category: category.nil? ? {} : category.values }
           end
 
           def find_categories_by_name(category_name)

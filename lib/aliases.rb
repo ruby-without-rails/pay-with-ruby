@@ -1,9 +1,8 @@
-HashUtils = CodeCode::Common::Utils::Hash
-
 # Aliases for Utils
 TokenUtils = PayWithRuby::Utils::Token
 LoggerUtils = PayWithRuby::Utils::Logger
 StringUtils = PayWithRuby::Utils::String
+HashUtils = CodeCode::Common::Utils::Hash
 
 # Aliases for Models classes
 
@@ -11,9 +10,17 @@ StringUtils = PayWithRuby::Utils::String
 UserToken = PayWithRuby::Models::AuthModule::UserToken
 ApiAuther = PayWithRuby::Models::AuthModule::ApiAuther
 
-# usuario.rb
-User = PayWithRuby::Models::UserModule::User
-Role = PayWithRuby::Models::UserModule::Role
-
 # category.rb
 Category = PayWithRuby::Models::ProductModule::Category
+
+# product.rb
+Product = PayWithRuby::Models::ProductModule::Product
+
+# role.rb
+Role = PayWithRuby::Models::UserModule::Role
+
+# thumb.rb
+Thumb = PayWithRuby::Models::ProductModule::Thumb
+
+# user.rb
+User = PayWithRuby::Models::UserModule::User
