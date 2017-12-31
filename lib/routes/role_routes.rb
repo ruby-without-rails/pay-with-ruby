@@ -1,10 +1,6 @@
 module RoleRoutes
   class << self
     def extended(controller)
-      controller.include PayWithRuby::Helpers::ApiHelper::ApiBuilder
-      controller.include PayWithRuby::Helpers::ApiHelper::ApiValidation
-      controller.include PayWithRuby::Helpers::ApiHelper::ApiAccess
-
       controller.namespace('/api') do |c|
 
         c.get('/roles') do

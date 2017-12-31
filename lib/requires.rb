@@ -13,6 +13,7 @@ require 'helpers/api_helper'
 
 # Models import:
 require 'models/auth'
+require 'models/access_token'
 require 'models/category'
 require 'models/customer'
 require 'models/product'

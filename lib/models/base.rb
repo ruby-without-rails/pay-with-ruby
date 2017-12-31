@@ -25,12 +25,12 @@ module PayWithRuby
           homolog_config = yaml['homolog']
 
           case ENV['RACK_ENV']
-          when 'HMG' then
-            Sequel.postgres(homolog_config)
-          when 'DEV' then
-            Sequel.postgres(develop_config)
-          else
-            Sequel.postgres(default_config)
+            when 'HMG' then
+              Sequel.postgres(homolog_config)
+            when 'DEV' then
+              Sequel.postgres(develop_config)
+            else
+              Sequel.postgres(default_config)
           end
         end
       end
@@ -67,7 +67,7 @@ module PayWithRuby
         end
 
         def to_hash
-          { status: @status, message: @message, code: @code, data: @data }
+          {status: @status, message: @message, code: @code, data: @data}
         end
 
         def to_response
@@ -82,6 +82,11 @@ module PayWithRuby
       class AccessDeniedException < ModelException
         attr_reader :required_level
 
+        # @param [String] message
+        # @param [Integer] status
+        # @param [String] required_level
+        # @param [String] current_level
+        # @return [AccessDeniedException]
         def initialize(message, status = 401, required_level, current_level)
           @status = status
           @message = message
@@ -90,7 +95,7 @@ module PayWithRuby
         end
 
         def to_hash
-          { status: @status, message: @message, required_level: @required_level, current_level: @current_level }
+          {status: @status, message: @message, required_level: @required_level, current_level: @current_level}
         end
       end
 
@@ -120,7 +125,8 @@ module PayWithRuby
       end
 
       # @class [IntegrationModel]
-      class IntegrationModel < BusinessModel; end
+      class IntegrationModel < BusinessModel;
+      end
     end
   end
 end

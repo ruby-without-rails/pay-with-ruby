@@ -1,8 +1,6 @@
 module UserRoutes
   class << self
     def extended(controller)
-      controller.include PayWithRuby::Helpers::ApiHelper::ApiBuilder
-
       controller.namespace('/api') do |c|
 
         c.post('/users/find') do

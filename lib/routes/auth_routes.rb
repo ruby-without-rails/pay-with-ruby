@@ -1,9 +1,6 @@
 module AuthRoutes
   class << self
     def extended(controller)
-      controller.include PayWithRuby::Helpers::ApiHelper::ApiBuilder
-
-
       controller.namespace('/api') do |c|
         c.namespace('/auth') do |c|
 
@@ -14,7 +11,7 @@ module AuthRoutes
 
               halt 400 , JSON.generate({msg: 'Incorret Request params.'}) if user and customer
 
-              if user || customer
+              if user or customer
                 _status_code = 200
                 user = user.nil? ? {} : user
                 customer = customer.nil? ? {} : customer

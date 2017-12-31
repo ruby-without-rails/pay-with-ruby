@@ -171,12 +171,14 @@ module PayWithRuby
   end
 
   class BaseApis < BaseApp
+    require 'routes/base_routes.rb'
     require 'routes/auth_routes.rb'
     require 'routes/category_routes'
     require 'routes/product_routes'
     require 'routes/role_routes'
     require 'routes/user_routes'
 
+    include BaseRoutes
     extend AuthRoutes
     extend CategoryRoutes
     extend ProductRoutes
