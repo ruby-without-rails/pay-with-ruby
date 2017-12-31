@@ -186,4 +186,11 @@ module PayWithRuby
     extend OrderRoutes
     extend UserRoutes
   end
+
+  class PaymentApis < BaseApp
+    require 'routes/payment_routes'
+
+    include BaseRoutes
+    extend PaymentRoutes
+  end
 end

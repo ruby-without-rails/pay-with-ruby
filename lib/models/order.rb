@@ -82,9 +82,14 @@ module PayWithRuby
             end
           end
 
-          def get_order_by_id(order_id)
+          def get_order_by_id(order_id, for_api = true)
             order = Order[order_id]
-            {order: order.nil? ? {} : order.values}
+
+            if for_api
+              {order: order.nil? ? {} : order.values}
+            else
+              order
+            end
           end
 
           def list_orders(request_token)

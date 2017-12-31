@@ -25,4 +25,7 @@ require 'models/startup_config'
 require 'models/thumb'
 require 'models/user'
 
+# mundipagg
+require 'gateways/mundipagg/models/payment'
+
 require 'aliases'

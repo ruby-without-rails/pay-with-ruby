@@ -36,3 +36,10 @@ Thumb = PayWithRuby::Models::ProductModule::Thumb
 
 # user.rb
 User = PayWithRuby::Models::UserModule::User
+
+
+# Mundipagg Gateways
+# payment.rb
+Payment = PayWithRuby::Gateways::Payment::MundiPagg::Payment
+BankTransfer = PayWithRuby::Gateways::Payment::MundiPagg::BankTransfer
+CreditCard = PayWithRuby::Gateways::Payment::MundiPagg::CreditCard
