@@ -13,6 +13,7 @@ module AuthRoutes
 
               if user
                 _status_code = 200
+                ApiAuther.clean_old_tokens(user[:id])
                 user_token = UserToken.save_user_token(user[:id])
                 body = {token: user_token.token}
               else

@@ -9,7 +9,6 @@ module PayWithRuby
 
       # @class [User]
       class User < BaseModel
-        include CodeCode::Common::Utils::Hash
 
         # Set User dataset:
         set_dataset DB[:users]
@@ -31,7 +30,6 @@ module PayWithRuby
 
         class << self
           def save_user(user_data)
-            symbolize_keys!(user_data)
 
             role = Role.get_role_by_code(user_data[:role])
             raise ModelException, 'O codigo do perfil é obrigatório.' unless role
@@ -56,8 +54,6 @@ module PayWithRuby
           end
 
           def update_user(user_data)
-            symbolize_keys!(user_data)
-
             user = User.where(id: user_data[:id]).first
             raise ModelException, 'Impossível de atualizar, usuário inexistente no banco de dados.' unless user
 
@@ -85,13 +81,9 @@ module PayWithRuby
           end
 
           def login_user(login_data)
-            symbolize_keys!(login_data)
-
-            user = DB[:users]
-                       .select(:id, :name, :cpf, :email, :role_id, :created_at)
-                       .where(email: login_data[:email], password: Digest::SHA1.hexdigest(login_data[:password]), deleted_at: nil).first
-
-            user
+            crypt_password = Digest::SHA1.hexdigest(login_data[:password])
+            DB[:users].select(:id, :name, :cpf, :email, :role_id, :created_at)
+                .where(email: login_data[:email], password: crypt_password, deleted_at: nil).first
           end
 
           def get_user_by_id_as_object(user_id)
@@ -175,8 +167,6 @@ module PayWithRuby
           end
 
           def change_password(body_params, token, user)
-            symbolize_keys!(body_params)
-
             is_valid = user.password.eql? Digest::SHA1.hexdigest(body_params[:password])
 
             raise ModelException, 'Impossível alterar a senha. Senha incorreta.' unless is_valid
