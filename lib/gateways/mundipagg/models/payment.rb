@@ -35,8 +35,8 @@ module PayWithRuby
           end
         end
 
-        # @class [BankTransfer]
-        class BankTransfer < IntegrationModel
+        # @class [OnlineDebitTransaction]
+        class OnlineDebitTransaction < IntegrationModel
           class << self
 
             # Realiza Pagamento com Transferência Bancária
@@ -44,10 +44,6 @@ module PayWithRuby
             def pay(payment_data)
               buyer = payment_data[:buyer]
               selected_payment = payment_data[:selected_payment]
-
-              string_email = payment_data[:email]
-              payment_data[:email] = {}
-              payment_data[:email][:endereco] = string_email
               payment_data[:installments] = 1
 
               DB.transaction(rollback: :reraise) do
@@ -69,7 +65,7 @@ module PayWithRuby
                             }
                         },
                     Order: {
-                        OrderReference: payment_data[:order_id]
+                        OrderReference: payment_data[:order][:id]
                     }
                 }.to_json
 
@@ -103,13 +99,12 @@ module PayWithRuby
                 # Valor da transação em centavos. R$ 100,00 = 10000
                 received_value = transaction[:AmountPaidInCents].to_f / 100
 
-                # dar baixa no acordo e nas pendencias do acordo
-                if received_value >= acordo[:valor]
+                order = Order.get_order_by_id(order_reference)
+                raise ModelException.new 'Pedido não encontrado.' unless order
 
-                  situacao_acordo = SituacaoAcordo.obter_situacao_pelo_codigo('AcordoFirmado')
-                  raise ModelException, 'Situação de acordo não encontrado.' unless situacao_acordo
+                # dar baixa no pedido
+                if received_value >= order[:total]
 
-                  acordo.update(situacao_id: situacao_acordo[:id])
 
                 end
               end
@@ -256,7 +251,8 @@ module PayWithRuby
                 if success
                   data = {
                       authorization_code: authorization_code,
-                      success: success
+                      success: success,
+                      order_result: response[:OrderResult]
                   }
 
 

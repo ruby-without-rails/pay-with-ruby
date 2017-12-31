@@ -41,5 +41,5 @@ User = PayWithRuby::Models::UserModule::User
 # Mundipagg Gateways
 # payment.rb
 Payment = PayWithRuby::Gateways::Payment::MundiPagg::Payment
-BankTransfer = PayWithRuby::Gateways::Payment::MundiPagg::BankTransfer
+OnlineDebitTransaction = PayWithRuby::Gateways::Payment::MundiPagg::OnlineDebitTransaction
 CreditCard = PayWithRuby::Gateways::Payment::MundiPagg::CreditCard

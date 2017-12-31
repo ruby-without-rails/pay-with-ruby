@@ -5,7 +5,7 @@ module PayWithRuby
     # Module DiscoverOSUtil
     module DiscoverOS
       class << self
-        def os?
+        def os
           case os_string
           when /mswin|msys|mingw|cygwin|bccwin|wince|emc/ then :windows
           when /darwin|mac os/ then :macosx
