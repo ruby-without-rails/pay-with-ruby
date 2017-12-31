@@ -112,12 +112,12 @@ create table orders(
 create unique index orders_id_uindex
   on orders (id);
 
+create table configurations(
+  name varchar(100) not null
+    constraint configurations_pkey
+    primary key,
+  value varchar(255) not null
+);
 
-
-
-
-
-
-
-
-
+create unique index configurations_name_uindex
+  on configurations (name);

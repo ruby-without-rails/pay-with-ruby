@@ -4,11 +4,12 @@ source 'https://rubygems.org'
 ruby '>= 1.9.3'
 
 gem 'codecode-common-utils'
-gem 'rest-client'
+gem 'rest-client','1.8'
 
 gem 'i18n'
 gem 'mustache'
 gem 'rubocop'
+gem 'mundipagg_sdk', '1.4.1'
 
 gem 'sentry-raven'
 gem 'sinatra'

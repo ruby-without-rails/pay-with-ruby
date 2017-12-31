@@ -13,6 +13,9 @@ ApiAuther = PayWithRuby::Models::AuthModule::ApiAuther
 # category.rb
 Category = PayWithRuby::Models::ProductModule::Category
 
+# configuration.rb
+Configuration = PayWithRuby::Models::ConfigurationModule::Configuration
+
 # customer.rb
 Customer = PayWithRuby::Models::CustomerModule::Customer
 
@@ -24,6 +27,9 @@ Product = PayWithRuby::Models::ProductModule::Product
 
 # role.rb
 Role = PayWithRuby::Models::UserModule::Role
+
+# startup.rb
+StartupConfig = PayWithRuby::Models::ConfigurationModule::StartupConfig.instance
 
 # thumb.rb
 Thumb = PayWithRuby::Models::ProductModule::Thumb
