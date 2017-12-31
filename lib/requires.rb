@@ -14,6 +14,7 @@ require 'helpers/api_helper'
 # Models import:
 require 'models/auth'
 require 'models/category'
+require 'models/customer'
 require 'models/product'
 require 'models/role'
 require 'models/thumb'

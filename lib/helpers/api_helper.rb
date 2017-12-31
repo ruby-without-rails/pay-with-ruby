@@ -77,7 +77,7 @@ module PayWithRuby
 
         private
         def identify_user(token)
-          UserToken.get_user_by_token(token)
+          AccessToken.get_access_token_by_token(token)
         end
       end
     end

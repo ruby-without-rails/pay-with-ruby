@@ -173,7 +173,7 @@ module PayWithRuby
 
             user = user.update(password: Digest::SHA1.hexdigest(body_params[:new_password]))
 
-            UserToken.invalidade_token(token)
+            AccessToken.invalidade_token(token)
 
             user
           end

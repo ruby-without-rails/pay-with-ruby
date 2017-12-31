@@ -78,6 +78,7 @@ module PayWithRuby
               # Read and save request data to be used in the error handler
               @request_payload = request.body.read
               @request_payload = @request_payload.delete("\n")
+              @request_ip = request.env['REMOTE_ADDR']
               @request_url = request.env['REQUEST_URI']
               @request_token = request.env['HTTP_PAYWITHRUBY_AUTH_TOKEN']
               request.body.rewind

@@ -7,11 +7,14 @@ HashUtils = CodeCode::Common::Utils::Hash
 # Aliases for Models classes
 
 # auth.rb
-UserToken = PayWithRuby::Models::AuthModule::UserToken
+AccessToken = PayWithRuby::Models::AuthModule::AccessToken
 ApiAuther = PayWithRuby::Models::AuthModule::ApiAuther
 
 # category.rb
 Category = PayWithRuby::Models::ProductModule::Category
+
+# customer.rb
+Customer = PayWithRuby::Models::CustomerModule::Customer
 
 # product.rb
 Product = PayWithRuby::Models::ProductModule::Product

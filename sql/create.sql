@@ -26,15 +26,19 @@ create table users(
   unique (email, deleted_at)
 );
 
-create table user_tokens(
+create table access_tokens(
   id bigserial not null
-    constraint user_tokens_pkey
+    constraint access_tokens_pkey
     primary key,
   token varchar(255),
-  user_id bigint not null
-    constraint user_tokens_user_id_fkey
+  user_id bigint
+    constraint access_tokens_user_id_fkey
     references users,
-  expiration_time timestamp not null
+  expiration_time timestamp not null,
+  ip varchar(100) not null,
+  customer_id bigint
+    constraint access_tokens_customers_id_fk
+    references customers
 );
 
 create table categories(

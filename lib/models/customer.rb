@@ -113,6 +113,11 @@ module PayWithRuby
 
             {msg: msg}
           end
+
+          def login_customer(login_data)
+            DB[:customers].select(:id, :name, :cpf, :email, :fcm_id, :created_at)
+                .where(fcm_id: login_data[:fcm_id], deleted_at: nil).first
+          end
         end
       end
     end

@@ -9,16 +9,22 @@ module AuthRoutes
 
           c.post('/login') do
             make_default_json_api(self, @request_payload) do |params, _status_code|
-              user = User.login_user(params)
+              user = User.login_user(params) if params.key?(:email) and params.key?(:password)
+              customer = Customer.login_customer(params) if params.key?(:fcm_id)
 
-              if user
+              halt 400 , JSON.generate({msg: 'Incorret Request params.'}) if user and customer
+
+              if user || customer
                 _status_code = 200
-                ApiAuther.clean_old_tokens(user[:id])
-                user_token = UserToken.save_user_token(user[:id])
-                body = {token: user_token.token}
+                user = user.nil? ? {} : user
+                customer = customer.nil? ? {} : customer
+
+                ApiAuther.clean_old_tokens(user, customer)
+                access_token = AccessToken.save_access_token(user, customer, @request_ip)
+                body = {token: access_token.token}
               else
                 _status_code = 400
-                body = {mensagem: 'Login ou senha inválidos'}
+                body = {mensagem: 'Login , senha ou fcm_id inválidos'}
               end
 
               {status: _status_code, response: body}
@@ -33,8 +39,12 @@ module AuthRoutes
 
           c.get('/user_data') do
             make_default_json_api(self) do
-              user_token = ApiAuther.identify(@request_token)
-              User.get_user_by_id(user_token.user_id)
+              access_token = ApiAuther.identify(@request_token)
+              if access_token.user
+                User.get_user_by_id(access_token.user_id)
+              else
+                Customer.get_customer_by_id(access_token.customer_id)
+              end
             end
           end
         end
