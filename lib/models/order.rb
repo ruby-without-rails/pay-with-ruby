@@ -4,7 +4,7 @@ include PayWithRuby::Models::Base
 
 module PayWithRuby
   module Models
-    module OrdersModule
+    module OrderModule
 
       class Order < BaseModel
         # Set Customer dataset:

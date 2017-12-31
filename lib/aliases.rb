@@ -16,6 +16,9 @@ Category = PayWithRuby::Models::ProductModule::Category
 # customer.rb
 Customer = PayWithRuby::Models::CustomerModule::Customer
 
+# order.rb
+Order = PayWithRuby::Models::OrderModule::Order
+
 # product.rb
 Product = PayWithRuby::Models::ProductModule::Product
 

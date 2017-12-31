@@ -176,6 +176,7 @@ module PayWithRuby
     require 'routes/category_routes'
     require 'routes/product_routes'
     require 'routes/role_routes'
+    require 'routes/order_routes'
     require 'routes/user_routes'
 
     include BaseRoutes
@@ -183,6 +184,7 @@ module PayWithRuby
     extend CategoryRoutes
     extend ProductRoutes
     extend RoleRoutes
+    extend OrderRoutes
     extend UserRoutes
   end
 end
