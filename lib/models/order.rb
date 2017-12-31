@@ -18,29 +18,54 @@ module PayWithRuby
 
         def validate
           super
+          errors.add(:total, 'cannot be null') if total.nil?
+          errors.add(:total, 'cannot be zero') if total and total.zero?
+          errors.add(:total, 'must be greater than zero') if total and total < 0
+
+          errors.add(:discount, 'cannot be null') if discount.nil?
+          errors.add(:discount, 'must be greater than zero') if discount and discount < 0
+
+          errors.add(:cart, 'cannot be null') if cart.nil?
+          errors.add(:cart, 'cannot be empty') if cart and cart.empty?
+        end
+
+        def before_validate
+          self.cart = JSON.generate(self.cart)
+        end
+
+        def before_save
+          self.cart = JSON.generate(self.cart)
+        end
+
+        def after_save
+          self.cart = JSON.parse(self.cart)
         end
 
         class << self
-          def save_order(order_data)
+          def save_order(order_data, request_token)
             order = Order.new
 
             order.created_at = Time.now
             order.discount = order_data[:discount]
             order.total = order_data[:total]
-            customer_id_or_name = order_data[:customer]
+            order.cart = order_data[:cart]
 
-            raise ModelException, 'Um id ou nome de Cliente deve ser informado' if customer_id_or_name.nil?
+            # customer_id_or_name = order_data[:customer]
+            #
+            # raise ModelException, 'Um id ou nome de Cliente deve ser informado' if customer_id_or_name.nil?
+            #
+            # if customer_id_or_name.match?(/\d/)
+            #   customer = Customer.get_customer_by_id(customer_id_or_name, false)
+            # else
+            #   customer = Customer.get_customer_by_name(customer_id_or_name, false)
+            # end
 
-            if customer_id_or_name.match?(/\d/)
-              customer = Customer.get_customer_by_id(customer_id_or_name, false)
-            else
-              customer = Customer.get_customer_by_name(customer_id_or_name, false)
-            end
+            access_token = ApiAuther.identify(request_token)
+            customer = access_token.customer
 
-            raise ModelException, "Cliente não encontrada." unless customer
+            raise ModelException, 'Cliente não encontrado.' unless customer
 
             order.customer = customer
-
 
             if order.valid?
               order.save

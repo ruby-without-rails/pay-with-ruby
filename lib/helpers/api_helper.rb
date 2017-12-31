@@ -69,8 +69,9 @@ module PayWithRuby
         include PayWithRuby::Models::Base
 
         def validate_access(token, role)
-          user_token = identify_user(token)
-          current_level = user_token.user.role.code
+          access_token = identify_user(token)
+          raise ModelException, 'Usuário não encontrado para este Token.' unless access_token.user
+          current_level = access_token.user.role.code
           exceṕtion = AccessDeniedException.new message = 'Usuário com nível de acesso insuficiente.',current_level = current_level, required_level = role
           halt exceṕtion.to_response unless current_level.eql?(role)
         end

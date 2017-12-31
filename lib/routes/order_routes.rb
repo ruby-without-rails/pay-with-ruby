@@ -11,9 +11,8 @@ module OrderRoutes
 
         c.post('/order') do
           make_default_json_api(self, @request_payload) do |params, _status_code|
-            validate_access(@request_token, 'Admin')
-            validate_params(params, %i[code description])
-            {status: _status_code, response: Order.save_order(params)}
+            validate_params(params, %i[discount total cart])
+            {status: _status_code, response: Order.save_order(params, @request_token)}
           end
         end
 
