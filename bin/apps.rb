@@ -8,7 +8,6 @@ require 'sinatra/namespace'
 #
 # Require Authentication Models:
 #
-require 'models/base'
 require 'requires'
 
 module PayWithRuby

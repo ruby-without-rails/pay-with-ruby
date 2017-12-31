@@ -7,6 +7,7 @@ module PayWithRuby
     module ProductModule
 
       class Category < BaseModel
+
         # Set Category dataset:
         set_dataset DB[:categories]
 

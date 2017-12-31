@@ -7,7 +7,7 @@ module PayWithRuby
     module OrderModule
 
       class Order < BaseModel
-        # Set Customer dataset:
+        # Set Order dataset:
         set_dataset DB[:orders]
 
         # Set primary key and relationships:
@@ -17,7 +17,7 @@ module PayWithRuby
         def initialize
           super
         end
-        
+
         def after_initialize
           self.cart = JSON.parse(self.cart) unless self.cart.nil?
         end
@@ -87,8 +87,19 @@ module PayWithRuby
             {order: order.nil? ? {} : order.values}
           end
 
-          def list_orders
-            {orders: Order.where(canceled_at: nil).all.map(&:values)}
+          def list_orders(request_token)
+            access_token = ApiAuther.identify(request_token)
+            orders = Order.where(canceled_at: nil)
+
+            if access_token.user
+              orders = orders.all
+            elsif access_token.customer
+              orders = orders.where(customer_id: access_token.customer.id).all
+            else
+              raise ModelException, 'Não foi possível identificar o usuário.'
+            end
+
+            {orders: orders.map(&:values)}
           end
 
           def list_canceled_orders

@@ -12,6 +12,7 @@ require 'utils/token'
 require 'helpers/api_helper'
 
 # Models import:
+require 'models/base'
 require 'models/auth'
 require 'models/access_token'
 require 'models/category'

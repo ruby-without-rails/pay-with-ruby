@@ -7,6 +7,7 @@ module PayWithRuby
     module ProductModule
 
       class Thumb < BaseModel
+
         # Set Thumb dataset:
         set_dataset DB[:thumbs]
 

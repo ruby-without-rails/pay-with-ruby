@@ -38,7 +38,7 @@ module PayWithRuby
       # Database access constants:
       DB = load_db
 
-      unless PayWithRuby::Utils::DiscoverOSUtil.os?.eql?(:windows)
+      unless PayWithRuby::Utils::DiscoverOS.os?.eql?(:windows)
         if Sequel::Postgres.supports_streaming?
           # If streaming is supported, you can load the streaming support into the database:
           DB.extension(:pg_streaming)
@@ -110,7 +110,7 @@ module PayWithRuby
         Sequel::Model.plugin :force_encoding, DEFAULT_CHARSET
         Sequel::Model.plugin :after_initialize
 
-        Sequel.split_symbols = true
+        Sequel.split_symbols = false
         Sequel.extension :postgres_schemata
 
         extend CodeCode::Common::Utils::Hash

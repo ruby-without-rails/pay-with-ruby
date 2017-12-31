@@ -8,6 +8,7 @@ module PayWithRuby
 
       # @class [Role]
       class Role < BaseModel
+
         # Set Role dataset:
         set_dataset DB[:roles]
 

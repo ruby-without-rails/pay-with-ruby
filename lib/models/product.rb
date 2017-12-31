@@ -7,6 +7,7 @@ module PayWithRuby
     module ProductModule
 
       class Product < BaseModel
+
         # Set Product dataset:
         set_dataset DB[:products]
 

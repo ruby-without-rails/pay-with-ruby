@@ -3,7 +3,7 @@ require 'rbconfig'
 module PayWithRuby
   module Utils
     # Module DiscoverOSUtil
-    module DiscoverOSUtil
+    module DiscoverOS
       class << self
         def os?
           case os_string

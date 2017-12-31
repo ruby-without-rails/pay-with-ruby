@@ -14,7 +14,7 @@ module PayWithRuby
           # Verify if a given access token has access to the system. If so,
           # returns true, otherwise, returns false.
           def authorize(token)
-            access_token = AccessToken.where(token: token).where(Sequel.lit('expiration_time > :current_time', current_time: Time.now)).first
+            access_token = AccessToken.where(token: token).where(Sequel.lit('expires_at > :current_time', current_time: Time.now)).first
             raise ModelException.new('Access Token Not Found. User not authorized.', 401) unless access_token
 
             true
@@ -39,7 +39,7 @@ module PayWithRuby
           # From given token, locate the correspondent user and return her/his
           # data.
           def identify(token)
-            access_token = AccessToken.where(token: token).where(Sequel.lit('expiration_time > :current_time', current_time: Time.now)).first
+            access_token = AccessToken.where(token: token).where(Sequel.lit('expires_at > :current_time', current_time: Time.now)).first
             raise ModelException.new('Access Token não encontrado.', 404) unless access_token
 
             access_token

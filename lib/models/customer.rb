@@ -7,6 +7,7 @@ module PayWithRuby
     module CustomerModule
 
       class Customer < BaseModel
+
         # Set Customer dataset:
         set_dataset DB[:customers]
 

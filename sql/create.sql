@@ -34,7 +34,7 @@ create table access_tokens(
   user_id bigint
     constraint access_tokens_user_id_fkey
     references users,
-  expiration_time timestamp not null,
+  expires_at timestamp not null,
   ip varchar(100) not null,
   customer_id bigint
     constraint access_tokens_customers_id_fk

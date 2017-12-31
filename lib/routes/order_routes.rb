@@ -5,7 +5,7 @@ module OrderRoutes
 
         c.get('/orders') do
           make_default_json_api(self) do
-            Order.list_orders
+            Order.list_orders(@request_token)
           end
         end
 
