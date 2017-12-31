@@ -1,8 +1,8 @@
 module ProductRoutes
   class << self
     def extended(controller)
-      controller.include PayWithRuby::Helpers::ApiHelper
-      controller.include PayWithRuby::Helpers::ApiValidation
+      controller.include PayWithRuby::Helpers::ApiHelper::ApiBuilder
+      controller.include PayWithRuby::Helpers::ApiHelper::ApiValidation
 
       controller.namespace('/api') do |c|
 

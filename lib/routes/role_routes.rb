@@ -1,8 +1,9 @@
 module RoleRoutes
   class << self
     def extended(controller)
-      controller.include PayWithRuby::Helpers::ApiHelper
-      controller.include PayWithRuby::Helpers::ApiValidation
+      controller.include PayWithRuby::Helpers::ApiHelper::ApiBuilder
+      controller.include PayWithRuby::Helpers::ApiHelper::ApiValidation
+      controller.include PayWithRuby::Helpers::ApiHelper::ApiAccess
 
       controller.namespace('/api') do |c|
 
@@ -14,6 +15,7 @@ module RoleRoutes
 
         c.post('/role') do
           make_default_json_api(self, @request_payload) do |params, _status_code|
+            validate_access(@request_token, 'Admin')
             validate_params(params, %i[code description])
             {status: _status_code, response: Role.save_role(params)}
           end

@@ -78,6 +78,22 @@ module PayWithRuby
       # Class [UnexpectedParamException]
       class UnexpectedParamException < ModelException; end
 
+      # Class [AccessDeniedException]
+      class AccessDeniedException < ModelException
+        attr_reader :required_level
+
+        def initialize(message, status = 401, required_level, current_level)
+          @status = status
+          @message = message
+          @required_level = required_level
+          @current_level = current_level
+        end
+
+        def to_hash
+          { status: @status, message: @message, required_level: @required_level, current_level: @current_level }
+        end
+      end
+
       # BaseModel is just an alias to Sequel::Model class:
       class BaseModel < Sequel::Model
         DEFAULT_CHARSET = 'UTF-8'.freeze

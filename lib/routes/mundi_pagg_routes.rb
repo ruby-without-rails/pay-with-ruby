@@ -1,7 +1,7 @@
 module MundiPaggRoutes
   class << self
     def extended(controller)
-      controller.include PayWithRuby::Helpers::ApiHelper
+      controller.include PayWithRuby::Helpers::ApiHelper::ApiBuilder
 
       controller.get('/') do
         file_path = File.join(settings.public_folder, 'mundipagg.html')

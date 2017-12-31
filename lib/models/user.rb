@@ -16,7 +16,7 @@ module PayWithRuby
 
         # Set primary key and relationships:
         set_primary_key :id
-        many_to_one(:roles, class: 'PayWithRuby::Models::UserModule::Role', key: :role_id)
+        many_to_one(:role, class: 'PayWithRuby::Models::UserModule::Role', key: :role_id)
 
         # def initialize; end
 
