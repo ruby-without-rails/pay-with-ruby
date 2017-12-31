@@ -14,7 +14,13 @@ module PayWithRuby
         set_primary_key :id
         many_to_one(:customer, class: 'PayWithRuby::Models::CustomerModule::Customer', key: :customer_id)
 
-        # def initialize; end
+        def initialize
+          super
+        end
+        
+        def after_initialize
+          self.cart = JSON.parse(self.cart) unless self.cart.nil?
+        end
 
         def validate
           super
