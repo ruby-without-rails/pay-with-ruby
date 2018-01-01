@@ -111,7 +111,6 @@ module PayWithRuby
         Sequel::Model.plugin :after_initialize
 
         Sequel.split_symbols = false
-        Sequel.extension :postgres_schemata
 
         extend CodeCode::Common::Utils::Hash
       end

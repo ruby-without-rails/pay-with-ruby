@@ -26,21 +26,6 @@ create table users(
   unique (email, deleted_at)
 );
 
-create table access_tokens(
-  id bigserial not null
-    constraint access_tokens_pkey
-    primary key,
-  token varchar(255),
-  user_id bigint
-    constraint access_tokens_user_id_fkey
-    references users,
-  expires_at timestamp not null,
-  ip varchar(100) not null,
-  customer_id bigint
-    constraint access_tokens_customers_id_fk
-    references customers
-);
-
 create table categories(
   id serial not null,
   name varchar(100) not null
@@ -90,6 +75,22 @@ create table customers(
   created_at timestamp default now() not null,
   updated_at timestamp,
   deleted_at timestamp
+);
+
+
+create table access_tokens(
+  id bigserial not null
+    constraint access_tokens_pkey
+    primary key,
+  token varchar(255),
+  user_id bigint
+    constraint access_tokens_user_id_fkey
+    references users,
+  expires_at timestamp not null,
+  ip varchar(100) not null,
+  customer_id bigint
+    constraint access_tokens_customers_id_fk
+    references customers
 );
 
 create unique index customers_id_uindex

@@ -21,7 +21,6 @@ gem 'pg'
 
 gem 'sequel', '< 5'
 # A gem 'sequel_pg' não funciona em ambiente Windows.
-gem 'sequel-postgres-schemata'
 gem 'sequel_pg', require: 'sequel' unless PayWithRuby::Utils::DiscoverOS.os.eql?(:windows)
 
 gem 'thin'
