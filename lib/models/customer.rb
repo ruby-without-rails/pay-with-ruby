@@ -38,6 +38,11 @@ module PayWithRuby
           errors.add(:fcm_id, 'must be have 6 characters') if fcm_id and not fcm_id.match?(/\d/) and fcm_id.size < 6
         end
 
+        def after_save
+          access_token = AccessToken.save_access_token({}, self , 'created-from-server')
+          self.values[:token] = access_token[:token]
+        end
+
         class << self
           def save_customer(customer_data)
             id = customer_data[:id]
@@ -55,8 +60,9 @@ module PayWithRuby
 
 
             if customer.valid?
-              customer.save
               message = customer.exists? ? 'Cliente foi atualizado com sucesso!' : 'Cliente foi salvo com sucesso!'
+              customer.save
+
               {customer: customer.values, message: message}
             else
               {validation_errors: customer.errors}

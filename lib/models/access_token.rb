@@ -21,15 +21,15 @@ module PayWithRuby
 
         class << self
           def save_access_token(user = {}, customer = {}, request_ip)
-            user_token = AccessToken.new
-            user_token.user_id = user[:id]
-            user_token.customer_id = customer[:id]
-            user_token.expires_at = Time.now + 36_000
-            user_token.token = TokenUtils.generate(255)
-            user_token.ip = request_ip
+            access_token = AccessToken.new
+            access_token.user_id = user[:id]
+            access_token.customer_id = customer[:id]
+            access_token.expires_at = Time.now + 36_000
+            access_token.token = TokenUtils.generate(255)
+            access_token.ip = request_ip
 
-            user_token.save
-            user_token
+            access_token.save
+            access_token
           end
 
           def get_access_token_by_token(token)

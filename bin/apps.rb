@@ -65,7 +65,8 @@ module PayWithRuby
         Auther = PayWithRuby::Models::AuthModule::ApiAuther
 
         PUBLIC_PATHS = [
-            /\/api\/auth\/login/
+            /\/api\/auth\/login/,
+            /\/api\/customer/
         ].freeze
       end
 
@@ -173,6 +174,7 @@ module PayWithRuby
     require 'routes/base_routes.rb'
     require 'routes/auth_routes.rb'
     require 'routes/category_routes'
+    require 'routes/customer_routes'
     require 'routes/product_routes'
     require 'routes/role_routes'
     require 'routes/order_routes'
@@ -181,6 +183,7 @@ module PayWithRuby
     include BaseRoutes
     extend AuthRoutes
     extend CategoryRoutes
+    extend CustomerRoutes
     extend ProductRoutes
     extend RoleRoutes
     extend OrderRoutes
