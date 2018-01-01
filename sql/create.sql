@@ -45,11 +45,14 @@ create table products(
   description text not null,
   category_id bigint not null
     constraint products_categories_id_fk
-    references categories (id)
+    references categories (id),
+  notes text default ''::text not null,
+  price double precision default 0 not null
 );
 
 create unique index products_id_uindex
   on products (id);
+
 
 create table thumbs(
   id serial not null
@@ -74,9 +77,12 @@ create table customers(
   email varchar(255) not null,
   created_at timestamp default now() not null,
   updated_at timestamp,
-  deleted_at timestamp
+  deleted_at timestamp,
+  fcm_message_token varchar(255)
 );
 
+create unique index customers_id_uindex
+  on customers (id);
 
 create table access_tokens(
   id bigserial not null

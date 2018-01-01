@@ -33,7 +33,7 @@ module PayWithRuby
           errors.add(:email, 'must be have 6 characters') if email and not email.match?(/\d/) and email.size < 6
 
           errors.add(:fcm_id, 'cannot be null') if fcm_id.nil?
-          errors.add(:fcm_id, 'must be a String') if fcm_id and fcm_id.match?(/\d/)
+          # errors.add(:fcm_id, 'must be a String') if fcm_id and fcm_id.match?(/\d/)
           errors.add(:fcm_id, 'cannot be empty') if fcm_id and not fcm_id.match?(/\d/) and fcm_id.empty?
           errors.add(:fcm_id, 'must be have 6 characters') if fcm_id and not fcm_id.match?(/\d/) and fcm_id.size < 6
         end
