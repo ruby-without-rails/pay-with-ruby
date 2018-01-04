@@ -81,8 +81,6 @@ create table customers(
   fcm_message_token varchar(255)
 );
 
-create unique index customers_id_uindex
-  on customers (id);
 
 create table access_tokens(
   id bigserial not null
