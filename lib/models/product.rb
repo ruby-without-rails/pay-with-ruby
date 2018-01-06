@@ -70,7 +70,17 @@ module PayWithRuby
           end
 
           def list_products
-            {products: Product.all.map(&:values)}
+            products = Product.eager(:category).all
+            out = []
+            products.each{ |p|
+              category = p.category.values
+              product = p.values
+              product.delete(:category_id)
+              product[:category] = category
+              out << p.values
+            }
+
+            {products: out}
           end
 
           def delete_product(product_id)
