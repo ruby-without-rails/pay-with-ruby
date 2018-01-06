@@ -1,0 +1,2 @@
+ALTER TABLE categories ADD CONSTRAINT categories_id_pk PRIMARY KEY (id);
+ALTER TABLE products ADD image VARCHAR(255) DEFAULT '' NOT NULL;
