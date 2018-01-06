@@ -6,5 +6,6 @@ default: &default
  port: 5432
 develop:
   <<: *default
+  port: 5423
 homolog:
   <<: *default
