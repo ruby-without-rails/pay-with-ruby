@@ -66,7 +66,8 @@ module PayWithRuby
 
         PUBLIC_PATHS = [
             /\/api\/auth\/login/,
-            /\/api\/customer/
+            /\/api\/customer/,
+            /\/images\/*/
         ].freeze
       end
 

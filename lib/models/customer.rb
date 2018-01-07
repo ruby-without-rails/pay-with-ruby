@@ -47,7 +47,7 @@ module PayWithRuby
           def save_customer(customer_data)
             id = customer_data[:id]
 
-            if not id.nil? and id.match?(/\d/)
+            if not id.nil? and id.to_s.match?(/\d/)
               customer = Customer[id]
             else
               customer = Customer.new
@@ -65,7 +65,11 @@ module PayWithRuby
               message = customer.exists? ? 'Cliente foi atualizado com sucesso!' : 'Cliente foi salvo com sucesso!'
               customer.save
 
-              {customer: customer.values, message: message}
+              token = customer[:token]
+              customer_hash = customer.values
+              customer_hash.delete(:token)
+
+              {customer: customer_hash, token: token,  message: message}
             else
               {validation_errors: customer.errors}
             end
