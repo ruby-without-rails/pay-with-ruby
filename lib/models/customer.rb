@@ -57,6 +57,8 @@ module PayWithRuby
             customer.cpf = customer_data[:cpf]
             customer.email = customer_data[:email]
             customer.fcm_id = customer_data[:fcm_id]
+            customer.fcm_message_token = customer_data[:fcm_message_token]
+            customer.mobile_phone_number = customer_data[:mobile_phone_number]
 
 
             if customer.valid?
