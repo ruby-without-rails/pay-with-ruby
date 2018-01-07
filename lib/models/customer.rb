@@ -18,24 +18,25 @@ module PayWithRuby
 
         def validate
           super
-          errors.add(:name, 'cannot be null') if name.nil?
-          errors.add(:name, 'must be a String') if name and name.match?(/\d/)
-          errors.add(:name, 'cannot be empty') if name and not name.match?(/\d/) and name.empty?
-          errors.add(:name, 'must be have 6 characters') if name and not name.match?(/\d/) and name.size < 6
+          errors = []
+          errors << ({field: 'name', error: 'cannot be null'}) if name.nil?
+          errors << ({field: 'name', error: 'must be a String'}) if name and name.match?(/\d/)
+          errors << ({field: 'name', error: 'cannot be empty'}) if name and not name.match?(/\d/) and name.empty?
+          errors << ({field: 'name', error: 'must be have 6 characters'}) if name and not name.match?(/\d/) and name.size < 6
 
-          errors.add(:cpf, 'cannot be null') if cpf.nil?
-          errors.add(:cpf, 'must be a String') if cpf and not cpf.match?(/\w/)
-          errors.add(:cpf, 'cannot be empty') if cpf and not cpf.match?(/\d/) and cpf.empty?
+          errors << ({field: 'cpf', error: 'cannot be null'}) if cpf.nil?
+          errors << ({field: 'cpf', error: 'must be a String'}) if cpf and not cpf.match?(/\w/)
+          errors << ({field: 'cpf', error: 'cannot be empty'}) if cpf and not cpf.match?(/\d/) and cpf.empty?
 
-          errors.add(:email, 'cannot be null') if email.nil?
-          errors.add(:email, 'must be a String') if email and email.match?(/\d/)
-          errors.add(:email, 'cannot be empty') if email and not email.match?(/\d/) and email.empty?
-          errors.add(:email, 'must be have 6 characters') if email and not email.match?(/\d/) and email.size < 6
+          errors << ({field: 'email', error: 'cannot be null'}) if email.nil?
+          errors << ({field: 'email', error: 'must be a String'}) if email and email.match?(/\d/)
+          errors << ({field: 'email', error: 'cannot be empty'}) if email and not email.match?(/\d/) and email.empty?
+          errors << ({field: 'email', error: 'must be have 6 characters'}) if email and not email.match?(/\d/) and email.size < 6
 
-          errors.add(:fcm_id, 'cannot be null') if fcm_id.nil?
-          # errors.add(:fcm_id, 'must be a String') if fcm_id and fcm_id.match?(/\d/)
-          errors.add(:fcm_id, 'cannot be empty') if fcm_id and not fcm_id.match?(/\d/) and fcm_id.empty?
-          errors.add(:fcm_id, 'must be have 6 characters') if fcm_id and not fcm_id.match?(/\d/) and fcm_id.size < 6
+          errors << ({field: 'fcm_id', error: 'cannot be null'}) if fcm_id.nil?
+          # errors << ({field: 'fcm_id',error: 'must be a String'}) if fcm_id and fcm_id.match?(/\d/)
+          errors << ({field: 'fcm_id', error: 'cannot be empty'}) if fcm_id and not fcm_id.match?(/\d/) and fcm_id.empty?
+          errors << ({field: 'fcm_id', error: 'must be have 6 characters'}) if fcm_id and not fcm_id.match?(/\d/) and fcm_id.size < 6
         end
 
         def after_save
