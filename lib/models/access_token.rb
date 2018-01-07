@@ -25,19 +25,19 @@ module PayWithRuby
             access_token.user_id = user[:id]
             access_token.customer_id = customer[:id]
             access_token.expires_at = Time.now + 36_000
-            access_token.token = TokenUtils.generate(255)
+            access_token.key = TokenUtils.generate(255)
             access_token.ip = request_ip
 
             access_token.save
             access_token
           end
 
-          def get_access_token_by_token(token)
-            AccessToken.where(token: token).where(Sequel.lit('expires_at > :current_time', current_time: Time.now)).first
+          def get_access_token_by_token(key)
+            AccessToken.where(key: key).where(Sequel.lit('expires_at > :current_time', current_time: Time.now)).first
           end
 
-          def invalidade_token(token)
-            user_token = AccessToken.where(token: token).first
+          def invalidade_token(key)
+            user_token = AccessToken.where(key: key).first
             user_token.delete if user_token
           end
         end

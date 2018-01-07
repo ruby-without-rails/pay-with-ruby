@@ -18,7 +18,7 @@ module AuthRoutes
 
                 ApiAuther.clean_old_tokens(user, customer)
                 access_token = AccessToken.save_access_token(user, customer, @request_ip)
-                body = {token: access_token.token}
+                body = {token: access_token.key, expires_at: access_token.expires_at}
               else
                 _status_code = 400
                 body = {mensagem: 'Login , senha ou fcm_id inválidos'}

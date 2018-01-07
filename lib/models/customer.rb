@@ -40,7 +40,7 @@ module PayWithRuby
 
         def after_save
           access_token = AccessToken.save_access_token({}, self , 'created-from-server')
-          self.values[:token] = access_token[:token]
+          self.values[:access_token] = {key: access_token[:key], expires_at: access_token[:expires_at]}
         end
 
         class << self
@@ -65,11 +65,11 @@ module PayWithRuby
               message = customer.exists? ? 'Cliente foi atualizado com sucesso!' : 'Cliente foi salvo com sucesso!'
               customer.save
 
-              token = customer[:token]
+              token = customer[:access_token]
               customer_hash = customer.values
-              customer_hash.delete(:token)
+              customer_hash.delete(:access_token)
 
-              {customer: customer_hash, token: token,  message: message}
+              {customer: customer_hash, token: token, message: message}
             else
               {validation_errors: customer.errors}
             end
