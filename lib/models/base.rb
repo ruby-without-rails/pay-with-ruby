@@ -109,6 +109,7 @@ module PayWithRuby
 
         Sequel::Model.plugin :force_encoding, DEFAULT_CHARSET
         Sequel::Model.plugin :after_initialize
+        Sequel.convert_two_digit_years = true
 
         Sequel.split_symbols = false
 

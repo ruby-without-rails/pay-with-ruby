@@ -39,16 +39,27 @@ module PayWithRuby
         end
 
         def after_save
-          access_token = AccessToken.save_access_token({}, self , 'created-from-server')
+          access_token = AccessToken.save_access_token({}, self, 'created-from-server')
           self.values[:access_token] = {key: access_token[:key], expires_at: access_token[:expires_at]}
         end
 
         class << self
-          def save_customer(customer_data)
+          def save_customer(customer_data, request_token)
             id = customer_data[:id]
 
             if not id.nil? and id.to_s.match?(/\d/)
+              # TODO - identify and authorize only admins to create/update customers, and the owner of customer to update self
+              access_token = ApiAuther.identify(request_token) if request_token and id
+              raise ModelException.new 'Você precisa de um token para atualizar o Cliente.' unless access_token
+
+              old_customer = access_token.customer
+              raise ModelException.new 'Não foi encontrado um Cliente para este Token' unless old_customer
+
               customer = Customer[id]
+              raise ModelException.new "Cliente não encontrado com o id #{id}" unless customer
+
+              raise ModelException.new 'Somente o própio cliente ou Administrador podem atualizar os dados.' if customer[:id] != old_customer[:id] or !access_token.user.nil?
+
             else
               customer = Customer.new
             end

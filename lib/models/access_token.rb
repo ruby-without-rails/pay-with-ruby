@@ -18,6 +18,11 @@ module PayWithRuby
         many_to_one(:customer, class: 'PayWithRuby::Models::CustomerModule::Customer', key: :customer_id)
 
         # def initialize; end
+        #
+
+        def before_save
+          invalidade_token key(self.key) unless self.new?
+        end
 
         class << self
           def save_access_token(user = {}, customer = {}, request_ip)

@@ -12,7 +12,7 @@ module CustomerRoutes
 
         c.post('/customer') do
           make_default_json_api(self, @request_payload) do |params, _status_code|
-            {status: _status_code, response: Customer.save_customer(params)}
+            {status: _status_code, response: Customer.save_customer(params, @request_token)}
           end
         end
 
