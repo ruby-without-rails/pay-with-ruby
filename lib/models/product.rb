@@ -30,6 +30,28 @@ module PayWithRuby
         end
 
         class << self
+
+          def prepare_image(product)
+            if product.is_a?(Product)
+              unless product.new?
+                if not product.image.nil?
+                  if not product.image.empty?
+                    product.image.gsub!('{host}', StartupConfig.request_host)
+                  end
+                end
+                product
+              end
+            else
+              if product.has_key?(:image)
+                if not product[:image].nil?
+                  if not product[:image].empty?
+                    product[:image].gsub!('{host}', StartupConfig.request_host)
+                  end
+                end
+              end
+            end
+          end
+
           def save_product(product_data)
             id = product_data[:id]
 
