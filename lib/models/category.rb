@@ -16,19 +16,45 @@ module PayWithRuby
 
         # def initialize; end
 
+        def after_initialize
+          Category.prepare_image(self) unless self.new?
+        end
+
         def validate
           super
           errors.add(:name, 'cannot be null') if name.nil?
           errors.add(:name, 'must be a String') if name and name.match?(/\d/)
           errors.add(:name, 'cannot be empty') if name and not name.match?(/\d/) and name.empty?
-          errors.add(:name, 'must be have 6 characters') if name and not name.match?(/\d/) and name.size < 6
+          errors.add(:name, 'must be have 5 characters') if name and not name.match?(/\d/) and name.size < 5
         end
 
         class << self
+
+          def prepare_image(category)
+            if category.is_a?(Category)
+              unless category.new?
+                if not category.thumb.nil?
+                  if not category.thumb.empty?
+                    category.thumb.gsub!('{host}', StartupConfig.request_host)
+                  end
+                end
+                category
+              end
+            else
+              if category.has_key?(:thumb)
+                if not category[:thumb].nil?
+                  if not category[:thumb].empty?
+                    category[:thumb].gsub!('{host}', StartupConfig.request_host)
+                  end
+                end
+              end
+            end
+          end
+
           def save_category(category_data)
             id = category_data[:id]
 
-            if not id.nil? and id.match?(/\d/)
+            if not id.nil? and id.to_s.match?(/\d/)
               category = Category[id]
             else
               category = Category.new
@@ -42,6 +68,7 @@ module PayWithRuby
             if category.valid?
               category.save
               message = category.exists? ? 'Categoria foi atualizada com sucesso!' : 'Categoria foi salva com sucesso!'
+              prepare_image(category)
               {category: category.values, message: message}
             else
               {validation_errors: category.errors}
@@ -53,7 +80,13 @@ module PayWithRuby
             category = Category[category_id]
 
             if for_api
-              {category: category.nil? ? {} : category.values}
+              if category.nil?
+                category = {}
+              else
+                prepare_image(category)
+                category = category.values
+              end
+              {category: category}
             else
               category
             end
@@ -64,7 +97,13 @@ module PayWithRuby
             category = Category.where(name: category_name).first
 
             if for_api
-              {category: category.nil? ? {} : category.values}
+              if category.nil?
+                category = {}
+              else
+                prepare_image(category)
+                category = category.values
+              end
+              {category: category}
             else
               category
             end
@@ -76,7 +115,9 @@ module PayWithRuby
           end
 
           def list_categories
-            {categories: Category.all.map(&:values)}
+            categories = Category.all.map(&:values)
+            categories.each {|c| prepare_image(c)}
+            {categories: categories}
           end
 
           def delete_category(category_id)

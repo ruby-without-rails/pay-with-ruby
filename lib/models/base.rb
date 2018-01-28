@@ -21,10 +21,13 @@ module PayWithRuby
         def load_db
           yaml = load_config_file
           default_config = yaml['default']
+          prod_config = yaml['prod']
           develop_config = yaml['develop']
           homolog_config = yaml['homolog']
 
           case ENV['RACK_ENV']
+            when 'PROD' then
+              Sequel.postgres(prod_config)
             when 'HMG' then
               Sequel.postgres(homolog_config)
             when 'DEV' then

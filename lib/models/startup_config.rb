@@ -8,7 +8,7 @@ module PayWithRuby
       class StartupConfig
         include Singleton
 
-        attr_reader :environment
+        attr_reader :environment, :request_host
 
         # Obtem configurações e parametros de ambiente da tabela de configuração
         def initialize
@@ -18,9 +18,13 @@ module PayWithRuby
             when :develop then
               @merchant_key_mundipagg = get_configuration('api_key_mundipagg_sand')
               @base_url_mundipagg = get_configuration('mundipagg_sand_base_url')
+              @request_host = 'http://0.0.0.0:9292'
+
             when :prod then
               @merchant_key_mundipagg = get_configuration('api_key_mundipagg_prod')
               @base_url_mundipagg = get_configuration('mundipagg_prod_base_url')
+              @request_host = 'http://paymobile.codecode.com.br:9292'
+
             else
               fail '[Startup Info] - Não foi possível descobrir o ambiente. [PROD], [DEV] ou [TEST] ?'
           end
