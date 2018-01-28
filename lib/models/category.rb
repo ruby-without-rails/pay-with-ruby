@@ -35,6 +35,9 @@ module PayWithRuby
             end
 
             category.name = category_data[:name]
+            category.title = category_data[:title]
+            category.subtitle = category_data[:subtitle]
+            category.thumb = category_data[:thumb]
 
             if category.valid?
               category.save
