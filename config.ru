@@ -6,4 +6,4 @@ Rack::Handler.default.run(Rack::URLMap.new(
     '/mundipagg' => PayWithRuby::MundiPaggApis,
     '/vindi' => PayWithRuby::VindiApis,
     '/' => PayWithRuby::BaseApis,
-    '/payments' => PayWithRuby::PaymentApis), :Port => 9595, :Host => '0.0.0.0')
+    '/payments' => PayWithRuby::PaymentApis), :Port => 9292, :Host => '0.0.0.0')
