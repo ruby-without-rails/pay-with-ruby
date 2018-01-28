@@ -19,7 +19,7 @@ module PayWithRuby
         end
 
         def after_initialize
-          self.cart = JSON.parse(self.cart) unless self.cart.nil?
+          self.json_cart = JSON.parse(self.json_cart) unless self.json_cart.nil?
         end
 
         def validate
@@ -31,20 +31,20 @@ module PayWithRuby
           errors.add(:discount, 'cannot be null') if discount.nil?
           errors.add(:discount, 'must be greater than zero') if discount and discount < 0
 
-          errors.add(:cart, 'cannot be null') if cart.nil?
-          errors.add(:cart, 'cannot be empty') if cart and cart.empty?
+          errors.add(:cart, 'cannot be null') if json_cart.nil?
+          errors.add(:cart, 'cannot be empty') if json_cart and json_cart.empty?
         end
 
         def before_validate
-          self.cart = JSON.generate(self.cart)
+          self.json_cart = JSON.generate(self.json_cart)
         end
 
         def before_save
-          self.cart = JSON.generate(self.cart)
+          self.json_cart = JSON.generate(self.json_cart)
         end
 
         def after_save
-          self.cart = JSON.parse(self.cart)
+          self.json_cart = JSON.parse(self.json_cart)
         end
 
         class << self
@@ -54,7 +54,7 @@ module PayWithRuby
             order.created_at = Time.now
             order.discount = order_data[:discount]
             order.total = order_data[:total]
-            order.cart = order_data[:cart]
+            order.json_cart = order_data[:cart]
 
             # customer_id_or_name = order_data[:customer]
             #
