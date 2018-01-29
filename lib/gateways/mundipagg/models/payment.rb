@@ -234,6 +234,7 @@ module PayWithRuby
                 errors = []
 
                 total = 0
+                transaction_id = ""
 
                 if credit_card_transaction
                   credit_card_transaction.each do |t|
@@ -253,6 +254,7 @@ module PayWithRuby
                 if success
                   data = {
                       authorization_code: authorization_code,
+                      transaction_id: transaction_id,
                       success: success,
                       order_result: response[:OrderResult],
                       total: total
@@ -278,7 +280,7 @@ module PayWithRuby
                 # 'Paliativo' SandBox - Insere Mensagem de Erro quando valor for Superior ao Permitido no SandBox
                 if data[:errors] && data[:errors].empty?
                   if StartupConfig.environment == :develop
-                    data[:errors] << {msg: "#{credit_card_transaction.first[:AcquirerMessage]} \n Valor superior ao permitido em ambiente Sandbox > 1050,00"}
+                    data[:errors] << {msg: "#{credit_card_transaction.first[:AcquirerMessage]} \n Valor superior ao permitido em ambiente Sandbox > 1030,00"}
                   else
                     data[:errors] << {msg: "Não foi possível realizar o pagamento. \n Entre em contato com o suporte informando o seguinte erro: \n
                     #{credit_card_transaction.first[:AcquirerMessage]}"}
@@ -332,6 +334,7 @@ module PayWithRuby
               create_sale_request = Gateway::CreateSaleRequest.new
               create_sale_request.CreditCardTransactionCollection << credit_card_transaction
               create_sale_request.Order.OrderReference = reference_id
+              create_sale_request.ShoppingCartCollection = Order[reference_id].json_cart['products']
 
               # make the request and returns a response hash
               gateway.CreateSale(create_sale_request)
