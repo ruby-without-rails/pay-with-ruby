@@ -233,6 +233,8 @@ module PayWithRuby
 
                 errors = []
 
+                total = 0
+
                 if credit_card_transaction
                   credit_card_transaction.each do |t|
                     symbolize_keys!(t)
@@ -252,7 +254,8 @@ module PayWithRuby
                   data = {
                       authorization_code: authorization_code,
                       success: success,
-                      order_result: response[:OrderResult]
+                      order_result: response[:OrderResult],
+                      total: total
                   }
 
 
