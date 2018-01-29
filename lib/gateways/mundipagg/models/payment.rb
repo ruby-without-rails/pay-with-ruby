@@ -334,7 +334,7 @@ module PayWithRuby
               create_sale_request = Gateway::CreateSaleRequest.new
               create_sale_request.CreditCardTransactionCollection << credit_card_transaction
               create_sale_request.Order.OrderReference = reference_id
-              create_sale_request.ShoppingCartCollection = Order[reference_id].json_cart['products']
+              # create_sale_request.ShoppingCartCollection = Order[reference_id].json_cart['products']
 
               # make the request and returns a response hash
               gateway.CreateSale(create_sale_request)
