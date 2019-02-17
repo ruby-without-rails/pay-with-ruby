@@ -29,7 +29,7 @@ module PayWithRuby
           def unauthorize_or_raise(token)
             return_data = unauthorize(token)
             if return_data
-              {mensagem: 'Logout realizado com sucesso.'}
+              {message: 'Logout realizado com sucesso.'}
             else
               raise ModelException, 'Não foi possível realizar logout.'
             end

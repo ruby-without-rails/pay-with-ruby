@@ -143,7 +143,7 @@ Imagem Meramente Ilustrativa.', 269.9, 'https://images-submarino.b2w.io/produtos
 INSERT INTO public.products (name, id, description, category_id, notes, price, image) VALUES ('Game - Starfox Zero - Wii U', 10, 'Veja Novos Videos Enquanto Mata Ordas Frenéticas De Ataques Robôs.
 Defenda A Sua Instalação Do Forças Do Mal (Mas Fofinhos) Da Andross
 Crie Suas Próprias Ordas De Ataque Inimigas E Compartilhe Com Seus Amigos
-Suba De Nível Para Destravar Mais Missões E Câmeras Especiais', 1, '', 100, '');
+Suba De Nível Para Destravar Mais Missões E Câmeras Especiais', 1, '', 100, 'https://images-submarino.b2w.io/produtos/01/00/item/13982/1/13982172_1GG.jpg');
 INSERT INTO public.products (name, id, description, category_id, notes, price, image) VALUES ('Game - Darksiders II - Wii U', 8, 'Edição da série que segue as aventuras de Death - Morte, um dos quatro Cavaleiros do Apocalipse, numa história paralela aos eventos do jogo original. ', 1, 'Imagens meramente ilustrativas
 Todas informações são de responsabilidade do fabricante/fornecedor
 ', 170, 'https://images-submarino.b2w.io/produtos/01/00/item/120297/7/120297769_1GG.jpg');

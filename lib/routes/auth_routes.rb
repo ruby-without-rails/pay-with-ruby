@@ -28,8 +28,8 @@ module AuthRoutes
             end
           end
 
-          c.get('/logout') do
-            make_default_json_api(self) do
+          c.post('/logout') do
+            make_default_json_api(self, @request_payload) do
               ApiAuther.unauthorize_or_raise(@request_token)
             end
           end
