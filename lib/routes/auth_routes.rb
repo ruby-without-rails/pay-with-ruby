@@ -30,7 +30,9 @@ module AuthRoutes
 
           c.post('/logout') do
             make_default_json_api(self, @request_payload) do
-              ApiAuther.unauthorize_or_raise(@request_token)
+              status_code = 200
+              body = ApiAuther.unauthorize_or_raise(@request_token)
+              {status: status_code, response: body}
             end
           end
 
