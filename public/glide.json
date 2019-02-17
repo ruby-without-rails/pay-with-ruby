@@ -1,0 +1,37 @@
+[{
+  "name": "Zelda Wind Waker",
+  "url": {
+    "small": "{{host}}/images/wiiu_thelegendofzeldathewindwakerhd.jpg",
+    "medium": "{{host}}/images/wiiu_thelegendofzeldathewindwakerhd.jpg",
+    "large": "{{host}}/images/wiiu_thelegendofzeldathewindwakerhd.jpg"
+  },
+  "timestamp": "February 12, 2016"
+},
+  {
+    "name": "New Super Mario Bros",
+    "url": {
+      "small": "{{host}}/images/wiiu_newsupermariobrosu.jpg",
+      "medium": "{{host}}/images/wiiu_newsupermariobrosu.jpg",
+      "large": "{{host}}/images/wiiu_newsupermariobrosu.jpg"
+    },
+    "timestamp": "March 25, 2016"
+  },
+  {
+    "name": "Pikmin 3",
+    "url": {
+      "small": "{{host}}/images/wiiu_pikmin3.jpg",
+      "medium": "{{host}}/images/wiiu_pikmin3.jpg",
+      "large": "{{host}}/images/wiiu_pikmin3.jpg"
+    },
+    "timestamp": "May 6, 2016"
+  },
+  {
+    "name": "Star Fox Zero",
+    "url": {
+      "small": "{{host}}/images/wiiu_starfoxzero.jpg",
+      "medium": "{{host}}/images/wiiu_starfoxzero.jpg",
+      "large": "{{host}}/images/wiiu_starfoxzero.jpg"
+    },
+    "timestamp": "July 29, 2016"
+  }
+]
