@@ -1,8 +1,9 @@
 require_relative 'lib/utils/discover_os'
 
 source 'https://rubygems.org'
-ruby '>= 1.9.3'
-
+ruby '2.4.5'
+# gem install bundler -v 1.10.6
+gem 'bundler', '1.10.6'
 gem 'codecode-common-utils'
 gem 'rest-client','1.8'
 

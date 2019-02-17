@@ -106,12 +106,12 @@ module PayWithRuby
       class BaseModel < Sequel::Model
         DEFAULT_CHARSET = 'UTF-8'.freeze
 
-        @require_valid_table = false
         @forced_encoding = DEFAULT_CHARSET
         set_dataset DB['']
 
         Sequel::Model.plugin :force_encoding, DEFAULT_CHARSET
         Sequel::Model.plugin :after_initialize
+        Sequel::Model.require_valid_table = false
         Sequel.convert_two_digit_years = true
 
         Sequel.split_symbols = false

@@ -10,4 +10,4 @@ homolog:
   <<: *default
 prod:
   <<: *default
-  port: 5423
+  port: 5432
