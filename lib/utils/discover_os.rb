@@ -1,11 +1,14 @@
 require 'rbconfig'
+require 'singleton'
 
 module PayWithRuby
   module Utils
-    # Module DiscoverOSUtil
-    module DiscoverOS
+    # Class DiscoverOSUtil
+    class DiscoverOS
+      include Singleton
+
       class << self
-        def os
+        def os?
           case os_string
           when /mswin|msys|mingw|cygwin|bccwin|wince|emc/ then :windows
           when /darwin|mac os/ then :macosx

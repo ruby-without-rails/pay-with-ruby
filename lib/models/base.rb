@@ -45,7 +45,7 @@ module PayWithRuby
       #append log
       DB.loggers << Logger.new($stdout)
 
-      unless PayWithRuby::Utils::DiscoverOS.os.eql?(:windows)
+      unless PayWithRuby::Utils::DiscoverOS.os?.eql?(:windows)
         if Sequel::Postgres.supports_streaming?
           # If streaming is supported, you can load the streaming support into the database:
           DB.extension(:pg_streaming)
