@@ -1,3 +1,4 @@
+require 'logger'
 require 'yaml'
 require 'json'
 require 'sequel'
@@ -40,6 +41,9 @@ module PayWithRuby
 
       # Database access constants:
       DB = load_db
+
+      #append log
+      DB.loggers << Logger.new($stdout)
 
       unless PayWithRuby::Utils::DiscoverOS.os.eql?(:windows)
         if Sequel::Postgres.supports_streaming?

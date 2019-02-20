@@ -17,58 +17,49 @@ module PayWithRuby
 
       # The Generic Authentication Filter class:
       module AuthFilter
-        class << self
-          def extended(filter)
-            def filter.extended(controller)
-              # Set the Base Controller auth filter:
-              # controller.set_auth_filter self
-              auth_filter = self
-
-              # Block all paths, by default:
-              controller.before do
-                authorize = true
-                authorize = false if request.request_method == 'OPTIONS'
-
-                auth_filter::PUBLIC_PATHS.each {|path| authorize = false if path.match(request.path_info)}
-
-                #
-                # Evaluate authorization code
-                #
-                if authorize
-
-                  # 1. Get the PayWithRuby auth token:
-                  auth_token = request.env['HTTP_PAYWITHRUBY_AUTH_TOKEN']
-
-                  # 2. Authorize:
-                  begin
-                    auth_filter::Auther.authorize(auth_token)
-                  rescue StandardError => e
-                    content_type 'application/json;charset=utf-8'
-
-                    msg = 'PayWithRuby-Auth-Token inválido. Acesso não autorizado.'
-
-                    response = {message: msg, exception: e.message}
-
-                    halt 401, JSON.generate(response)
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-
-      module ApiAuthFilter
-        extend AuthFilter
-
-        # Set the authorization and authentication rules:
-        Auther = PayWithRuby::Models::AuthModule::ApiAuther
-
         PUBLIC_PATHS = [
             /\/api\/auth\/login/,
             /\/api\/customer/,
             /\/images\/*/
         ].freeze
+        class << self
+          def extended(controller)
+            # Set the Base Controller auth filter:
+            # controller.set_auth_filter self
+            _auth_filter = self
+
+            # Block all paths, by default:
+            controller.before do
+              authorize = true
+              authorize = false if request.request_method == 'OPTIONS'
+
+              PUBLIC_PATHS.each {|path| authorize = false if path.match(request.path_info)}
+
+              #
+              # Evaluate authorization code
+              #
+              if authorize
+
+                # 1. Get the PayWithRuby auth token:
+                auth_token = request.env['HTTP_PAYWITHRUBY_AUTH_TOKEN']
+
+                # 2. Authorize:
+                begin
+                  # Set the authorization and authentication rules:
+                  PayWithRuby::Models::AuthModule::ApiAuther.authorize(auth_token)
+                rescue StandardError => e
+                  content_type :json
+
+                  msg = 'PayWithRuby-Auth-Token inválido. Acesso não autorizado.'
+
+                  response = {message: msg, exception: e.message}
+
+                  halt 401, JSON.generate(response)
+                end
+              end
+            end
+          end
+        end
       end
 
       # Sentry Logger Filter class:
@@ -85,12 +76,12 @@ module PayWithRuby
               request.body.rewind
 
               case request.env['REQUEST_METHOD']
-                when 'POST', 'PUT' then
-                  if @request_payload.nil? || @request_payload.empty?
-                    exception = UnexpectedParamException.new 'Request sem parâmetros.'
-                    content_type 'application/json;charset=utf-8'
-                    halt 400, exception.to_json
-                  end
+              when 'POST', 'PUT' then
+                if @request_payload.nil? || @request_payload.empty?
+                  exception = UnexpectedParamException.new 'Request sem parâmetros.'
+                  content_type 'application/json;charset=utf-8'
+                  halt 400, exception.to_json
+                end
               end
             end
 
@@ -111,7 +102,7 @@ module PayWithRuby
       # The Basic Controller Class, with authentication
       class BaseApp < Sinatra::Application
         # Extend especific filters:
-        extend ApiAuthFilter
+        extend AuthFilter
         extend LoggerFilter
         extend PayWithRuby::Utils::Logger
 
